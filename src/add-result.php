@@ -83,7 +83,6 @@ if(isset($_POST['save_result'])){
 $stmt = $conn->prepare("
     SELECT id, title
     FROM courses
-    WHERE status = 1
     ORDER BY title ASC
 ");
 

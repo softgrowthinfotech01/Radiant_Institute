@@ -276,7 +276,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                                     <div class="font-medium">
 
-                                                        <?php echo $result['title']; ?>
+                                                        <?php echo $result['title'] ?? 'Course Deleted'; ?>
 
                                                     </div>
 

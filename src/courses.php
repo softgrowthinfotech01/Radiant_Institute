@@ -1,10 +1,10 @@
 <?php
 session_start();
-if(!isset($_SESSION['admin'])){
+if (!isset($_SESSION['admin'])) {
 
-    header('location:login');
+  header('location:login');
 
-    exit;
+  exit;
 }
 
 include('conn.php');
@@ -14,8 +14,8 @@ $search = $_GET['search'] ?? '';
 $status = $_GET['status'] ?? '';
 
 $page = isset($_GET['page'])
-? (int)$_GET['page']
-: 1;
+  ? (int)$_GET['page']
+  : 1;
 
 $limit = 5;
 
@@ -35,29 +35,22 @@ WHERE 1
 
 $params = [];
 
-if($search != ''){
+if ($search != '') {
 
-    $query .= "
+  $query .= "
     AND title LIKE :search
     ";
 
-    $params[':search'] = "%$search%";
+  $params[':search'] = "%$search%";
 }
 
-if($status != ''){
+if ($status !== '') {
 
-    if($status == 'Active'){
+  $query .= "
+    AND status = :status
+    ";
 
-        $query .= "
-        AND status = 1
-        ";
-
-    }else{
-
-        $query .= "
-        AND status = 0
-        ";
-    }
+  $params[':status'] = $status;
 }
 
 /*
@@ -72,27 +65,18 @@ FROM courses
 WHERE 1
 ";
 
-if($search != ''){
+if ($search != '') {
 
-    $countQuery .= "
+  $countQuery .= "
     AND title LIKE :search
     ";
 }
 
-if($status != ''){
+if ($status !== '') {
 
-    if($status == 'Active'){
-
-        $countQuery .= "
-        AND status = 1
-        ";
-
-    }else{
-
-        $countQuery .= "
-        AND status = 0
-        ";
-    }
+  $countQuery .= "
+    AND status = :status
+    ";
 }
 
 $countStmt = $conn->prepare($countQuery);
@@ -100,10 +84,10 @@ $countStmt = $conn->prepare($countQuery);
 $countStmt->execute($params);
 
 $totalRecords =
-$countStmt->fetch(PDO::FETCH_ASSOC)['total'];
+  $countStmt->fetch(PDO::FETCH_ASSOC)['total'];
 
 $totalPages =
-ceil($totalRecords / $limit);
+  ceil($totalRecords / $limit);
 
 /*
 |--------------------------------------------------------------------------
@@ -164,79 +148,79 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <div class="rounded-2xl border border-slate-200 bg-white shadow-card dark:border-slate-800 dark:bg-slate-900">
             <div class="flex flex-col gap-4 border-b border-slate-200 p-4 dark:border-slate-800 lg:flex-row lg:items-center lg:justify-between">
 
-    <form method="GET"
-        class="flex w-full flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <form method="GET"
+                class="flex w-full flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
 
-        <div class="flex w-full max-w-md gap-2">
+                <div class="flex w-full max-w-md gap-2">
 
-            <div class="relative flex-1">
+                  <div class="relative flex-1">
 
-                <svg class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24">
+                    <svg class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24">
 
-                    <path
+                      <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         stroke-width="2"
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
 
-                </svg>
+                    </svg>
 
-                <input
-                    type="search"
-                    name="search"
-                    value="<?php echo $search; ?>"
-                    placeholder="Search course..."
-                    class="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-sm outline-none ring-brand-500/30 placeholder:text-slate-400 focus:border-brand-300 focus:bg-white focus:ring-4 dark:border-slate-700 dark:bg-slate-950 dark:focus:bg-slate-950" />
+                    <input
+                      type="search"
+                      name="search"
+                      value="<?php echo $search; ?>"
+                      placeholder="Search course..."
+                      class="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-sm outline-none ring-brand-500/30 placeholder:text-slate-400 focus:border-brand-300 focus:bg-white focus:ring-4 dark:border-slate-700 dark:bg-slate-950 dark:focus:bg-slate-950" />
+
+                  </div>
+
+                  <button
+                    type="submit"
+                    class="btn btn-primary">
+
+                    Search
+
+                  </button>
+
+                </div>
+
+                <div>
+
+                  <select
+                    name="status"
+                    onchange="this.form.submit()"
+                    class="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-950">
+
+                    <option value="">
+                      All Status
+                    </option>
+
+                    <option
+                      value="1"
+                      <?php if ($status === '1') echo 'selected'; ?>>
+
+                      Active
+
+                    </option>
+
+                    <option
+                      value="0"
+                      <?php if ($status === '0') echo 'selected'; ?>>
+
+                      Inactive
+
+                    </option>
+
+                  </select>
+
+                </div>
+
+              </form>
 
             </div>
-
-            <button
-                type="submit"
-                class="btn btn-primary">
-
-                Search
-
-            </button>
-
-        </div>
-
-        <div>
-
-            <select
-                name="status"
-                onchange="this.form.submit()"
-                class="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-950">
-
-                <option value="">
-                    All Status
-                </option>
-
-                <option
-                    value="Active"
-                    <?php if($status == 'Active') echo 'selected'; ?>>
-
-                    Active
-
-                </option>
-
-                <option
-                    value="Inactive"
-                    <?php if($status == 'Inactive') echo 'selected'; ?>>
-
-                    Inactive
-
-                </option>
-
-            </select>
-
-        </div>
-
-    </form>
-
-</div>
 
             <div class="overflow-x-auto">
               <table class="w-full min-w-[640px] text-left text-sm">
@@ -317,58 +301,58 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <div class="flex flex-col items-center justify-between gap-4 border-t border-slate-200 px-4 py-4 dark:border-slate-800 sm:flex-row lg:px-6">
 
-    <p class="text-sm text-slate-500 dark:text-slate-400">
+              <p class="text-sm text-slate-500 dark:text-slate-400">
 
-        Showing
+                Showing
 
-        <span class="font-medium text-slate-900 dark:text-white">
+                <span class="font-medium text-slate-900 dark:text-white">
 
-            <?php echo count($courses); ?>
+                  <?php echo count($courses); ?>
 
-        </span>
+                </span>
 
-        of
+                of
 
-        <span class="font-medium text-slate-900 dark:text-white">
+                <span class="font-medium text-slate-900 dark:text-white">
 
-            <?php echo $totalRecords; ?>
+                  <?php echo $totalRecords; ?>
 
-        </span>
+                </span>
 
-        courses
+                courses
 
-    </p>
+              </p>
 
-    <div class="flex items-center gap-2">
+              <div class="flex items-center gap-2">
 
-        <?php if ($page > 1) { ?>
+                <?php if ($page > 1) { ?>
 
-            <a
-                href="?page=<?php echo $page - 1; ?>&search=<?php echo $search; ?>&status=<?php echo $status; ?>"
-                class="rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
+                  <a
+                    href="?page=<?php echo $page - 1; ?>&search=<?php echo $search; ?>&status=<?php echo $status; ?>"
+                    class="rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
 
-                Previous
+                    Previous
 
-            </a>
+                  </a>
 
-        <?php } ?>
+                <?php } ?>
 
-        <?php for ($i = 1; $i <= $totalPages; $i++) { ?>
+                <?php for ($i = 1; $i <= $totalPages; $i++) { ?>
 
-            <a
-                href="?page=<?php echo $i; ?>&search=<?php echo $search; ?>&status=<?php echo $status; ?>"
-                class="
+                  <a
+                    href="?page=<?php echo $i; ?>&search=<?php echo $search; ?>&status=<?php echo $status; ?>"
+                    class="
                 rounded-lg px-3.5 py-2 text-sm font-medium
 
                 <?php
 
-                if ($page == $i) {
+                  if ($page == $i) {
 
                     echo '
                     bg-brand-600
                     text-white
                     ';
-                } else {
+                  } else {
 
                     echo '
                     border border-slate-200
@@ -378,32 +362,32 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     dark:text-slate-200
                     dark:hover:bg-slate-800
                     ';
-                }
+                  }
 
                 ?>
                 ">
 
-                <?php echo $i; ?>
+                    <?php echo $i; ?>
 
-            </a>
+                  </a>
 
-        <?php } ?>
+                <?php } ?>
 
-        <?php if ($page < $totalPages) { ?>
+                <?php if ($page < $totalPages) { ?>
 
-            <a
-                href="?page=<?php echo $page + 1; ?>&search=<?php echo $search; ?>&status=<?php echo $status; ?>"
-                class="rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
+                  <a
+                    href="?page=<?php echo $page + 1; ?>&search=<?php echo $search; ?>&status=<?php echo $status; ?>"
+                    class="rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
 
-                Next
+                    Next
 
-            </a>
+                  </a>
 
-        <?php } ?>
+                <?php } ?>
 
-    </div>
+              </div>
 
-</div>
+            </div>
           </div>
         </div>
       </main>

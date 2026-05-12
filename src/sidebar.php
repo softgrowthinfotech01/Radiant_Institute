@@ -228,11 +228,7 @@
 
             </a>
 
-        </div>
-
-    </nav>
-
-    <!-- LOGOUT -->
+            <!-- LOGOUT -->
 
     <div class="sidebar-footer-inner border-t border-slate-200 p-3 dark:border-slate-800">
 
@@ -257,5 +253,9 @@
         </a>
 
     </div>
+
+        </div>
+
+    </nav>
 
 </aside>

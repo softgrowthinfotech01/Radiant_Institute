@@ -260,29 +260,42 @@ $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                 <div>
 
-                                    <label class="mb-3 block text-sm font-medium text-slate-700 dark:text-slate-300">
+    <label class="mb-3 block text-sm font-medium text-slate-700 dark:text-slate-300">
 
-                                        Existing Images
+        Existing Images
 
-                                    </label>
+    </label>
 
-                                    <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
 
-                                        <?php foreach($images as $image){ ?>
+        <?php foreach($images as $image){ ?>
 
-                                            <div class="relative overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700">
+            <div class="space-y-2">
 
-                                                <img
-                                                   src="uploads/results/<?php echo $image['image']; ?>"
-                                                    class="h-40 w-full object-cover" />
+                <div class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700">
 
-                                            </div>
+                    <img
+                        src="uploads/results/<?php echo $image['image']; ?>"
+                        class="h-40 w-full object-cover rounded-lg" />
 
-                                        <?php } ?>
+                </div>
 
-                                    </div>
+                <a
+                    href="delete-image.php?id=<?php echo $image['id']; ?>&table=result_images&folder=uploads/results&redirect=edit-result.php&foreign_key=result_id"
+                    onclick="return confirm('Delete this image?')"
+                    class="flex w-full items-center justify-center rounded-xl bg-red-500 px-3 py-2 text-sm font-medium text-white transition hover:bg-red-600">
 
-                                </div>
+                    Delete Image
+
+                </a>
+
+            </div>
+
+        <?php } ?>
+
+    </div>
+
+</div>
 
                                 <!-- NEW IMAGES -->
 

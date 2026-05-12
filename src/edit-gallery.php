@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(!isset($_SESSION['admin'])){
+if (!isset($_SESSION['admin'])) {
 
     header('location:login');
 
@@ -17,7 +17,7 @@ $id = $_GET['id'];
 |--------------------------------------------------------------------------
 */
 
-if(isset($_POST['update_gallery'])){
+if (isset($_POST['update_gallery'])) {
 
     $title = trim($_POST['title']);
 
@@ -50,18 +50,18 @@ if(isset($_POST['update_gallery'])){
     |--------------------------------------------------------------------------
     */
 
-    if(isset($_FILES['images'])){
+    if (isset($_FILES['images'])) {
 
-        foreach($_FILES['images']['tmp_name'] as $key => $tmp_name){
+        foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
 
-            if($_FILES['images']['error'][$key] == 0){
+            if ($_FILES['images']['error'][$key] == 0) {
 
                 $image_name =
-                time().'_'.$_FILES['images']['name'][$key];
+                    time() . '_' . $_FILES['images']['name'][$key];
 
                 move_uploaded_file(
                     $tmp_name,
-                    'uploads/gallery/'.$image_name
+                    'uploads/gallery/' . $image_name
                 );
 
                 $stmt = $conn->prepare("
@@ -240,113 +240,125 @@ $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                     <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
 
-                                        <?php foreach($images as $image){ ?>
+                                        <?php foreach ($images as $image) { ?>
 
-                                            <div class="relative overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700">
+                                            <div class="space-y-2">
 
-                                                <img
-                                                    src="uploads/gallery/<?php echo $image['image']; ?>"
-                                                    class="h-40 w-full object-cover" />
+                                                <div class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700">
+
+                                                    <img
+                                                        src="uploads/gallery/<?php echo $image['image']; ?>"
+                                                        class="h-40 w-full object-cover" />
+
+                                                </div>
+
+                                                <a
+                                                    href="delete-image.php?id=<?php echo $image['id']; ?>&table=gallery_images&folder=uploads/gallery&redirect=edit-gallery.php&foreign_key=gallery_id"
+                                                    onclick="return confirm('Delete this image?')"
+                                                    class="flex w-full mt-1 items-center justify-center rounded-xl bg-red-500 px-2 py-1 text-sm font-medium text-white transition hover:bg-red-600">
+
+                                                    Delete Image
+
+                                                </a>
 
                                             </div>
 
                                         <?php } ?>
 
-                                    </div>
-
                                 </div>
 
-                                <!-- NEW IMAGES -->
+                            </div>
 
-                                <div>
+                            <!-- NEW IMAGES -->
 
-                                    <div class="mb-3 flex items-center justify-between">
+                            <div>
 
-                                        <label class="text-sm font-medium text-slate-700 dark:text-slate-300">
+                                <div class="mb-3 flex items-center justify-between">
 
-                                            Add More Images
+                                    <label class="text-sm font-medium text-slate-700 dark:text-slate-300">
 
-                                        </label>
+                                        Add More Images
 
-                                        <button
-                                            type="button"
-                                            onclick="addImageField()"
-                                            class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-600 text-white shadow-sm transition hover:bg-brand-700">
-
-                                            <svg class="h-5 w-5"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24">
-
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    stroke-width="2"
-                                                    d="M12 4v16m8-8H4" />
-
-                                            </svg>
-
-                                        </button>
-
-                                    </div>
-
-                                    <div id="image-fields"
-                                        class="space-y-3">
-
-                                        <input
-                                            type="file"
-                                            name="images[]"
-                                            class="block w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-950" />
-
-                                    </div>
-
-                                </div>
-
-                                <!-- BUTTON -->
-
-                                <div class="flex justify-end gap-3 pt-4">
+                                    </label>
 
                                     <button
-                                        type="submit"
-                                        name="update_gallery"
-                                        class="btn btn-primary">
+                                        type="button"
+                                        onclick="addImageField()"
+                                        class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-600 text-white shadow-sm transition hover:bg-brand-700">
 
-                                        Update Gallery
+                                        <svg class="h-5 w-5"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24">
+
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M12 4v16m8-8H4" />
+
+                                        </svg>
 
                                     </button>
 
                                 </div>
 
+                                <div id="image-fields"
+                                    class="space-y-3">
+
+                                    <input
+                                        type="file"
+                                        name="images[]"
+                                        class="block w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-950" />
+
+                                </div>
+
+                            </div>
+
+                            <!-- BUTTON -->
+
+                            <div class="flex justify-end gap-3 pt-4">
+
+                                <button
+                                    type="submit"
+                                    name="update_gallery"
+                                    class="btn btn-primary">
+
+                                    Update Gallery
+
+                                </button>
+
                             </div>
 
                         </div>
 
-                    </form>
-
                 </div>
 
-            </main>
+                </form>
 
         </div>
+
+        </main>
+
+    </div>
 
     </div>
 
     <script src="../dist/js/app.js"></script>
 
     <script>
+        function addImageField() {
 
-    function addImageField(){
+            const container =
+                document.getElementById('image-fields');
 
-        const container =
-        document.getElementById('image-fields');
+            const wrapper =
+                document.createElement('div');
 
-        const wrapper =
-        document.createElement('div');
+            wrapper.className =
+                'flex items-center gap-3';
 
-        wrapper.className =
-        'flex items-center gap-3';
-
-        wrapper.innerHTML = `
+            wrapper.innerHTML = `
         
             <input
                 type="file"
@@ -363,14 +375,13 @@ $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </button>
         `;
 
-        container.appendChild(wrapper);
-    }
+            container.appendChild(wrapper);
+        }
 
-    function removeImageField(button){
+        function removeImageField(button) {
 
-        button.parentElement.remove();
-    }
-
+            button.parentElement.remove();
+        }
     </script>
 
 </body>

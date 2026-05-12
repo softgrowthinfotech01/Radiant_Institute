@@ -254,29 +254,42 @@ $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                 <div>
 
-                                    <label class="mb-3 block text-sm font-medium text-slate-700 dark:text-slate-300">
+    <label class="mb-3 block text-sm font-medium text-slate-700 dark:text-slate-300">
 
-                                        Existing Images
+        Existing Images
 
-                                    </label>
+    </label>
 
-                                    <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
 
-                                        <?php foreach($images as $image){ ?>
+        <?php foreach($images as $image){ ?>
 
-                                            <div class="relative overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700">
+            <div class="space-y-2">
 
-                                                <img
-                                                    src="uploads/social-links/<?php echo $image['image']; ?>"
-                                                    class="h-40 w-full object-cover" />
+                <div class="w-32 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700">
 
-                                            </div>
+                    <img
+                        src="uploads/social-links/<?php echo $image['image']; ?>"
+                        class="h-40 w-full object-cover" />
 
-                                        <?php } ?>
+                </div>
 
-                                    </div>
+                <a
+                    href="delete-image.php?id=<?php echo $image['id']; ?>&table=social_link_images&folder=uploads/social-links&redirect=edit-social-links.php&foreign_key=social_link_id"
+                    onclick="return confirm('Delete this image?')"
+                    class="flex items-center justify-center rounded-xl bg-red-500 px-3 py-2 text-sm font-medium text-white transition hover:bg-red-600">
 
-                                </div>
+                    Delete Image
+
+                </a>
+
+            </div>
+
+        <?php } ?>
+
+    </div>
+
+</div>
 
                                 <!-- NEW IMAGES -->
 

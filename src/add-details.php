@@ -66,7 +66,7 @@ if (isset($_POST['save_details'])) {
 
         move_uploaded_file(
             $_FILES['highlight_image']['tmp_name'],
-            '../uploads/course-details/' . $highlight_image
+            'uploads/course-details/' . $highlight_image
         );
     }
 

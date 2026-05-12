@@ -285,7 +285,7 @@ $details = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 <?php if($detail['highlight_image']){ ?>
 
                                                     <img
-                                                        src="../uploads/course-details/<?php echo $detail['highlight_image']; ?>"
+                                                        src="uploads/course-details/<?php echo $detail['highlight_image']; ?>"
                                                         class="h-14 w-14 rounded-lg object-cover border border-slate-200 dark:border-slate-700" />
 
                                                 <?php } else { ?>

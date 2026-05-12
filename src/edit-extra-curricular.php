@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(!isset($_SESSION['admin'])){
+if (!isset($_SESSION['admin'])) {
 
     header('location:login');
 
@@ -17,7 +17,7 @@ $id = $_GET['id'];
 |--------------------------------------------------------------------------
 */
 
-if(isset($_POST['update_activity'])){
+if (isset($_POST['update_activity'])) {
 
     $occasion = trim($_POST['occasion']);
 
@@ -50,18 +50,18 @@ if(isset($_POST['update_activity'])){
     |--------------------------------------------------------------------------
     */
 
-    if(isset($_FILES['images'])){
+    if (isset($_FILES['images'])) {
 
-        foreach($_FILES['images']['tmp_name'] as $key => $tmp_name){
+        foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
 
-            if($_FILES['images']['error'][$key] == 0){
+            if ($_FILES['images']['error'][$key] == 0) {
 
                 $image_name =
-                time().'_'.$_FILES['images']['name'][$key];
+                    time() . '_' . $_FILES['images']['name'][$key];
 
                 move_uploaded_file(
                     $tmp_name,
-                    'uploads/activities/'.$image_name
+                    'uploads/activities/' . $image_name
                 );
 
                 $stmt = $conn->prepare("
@@ -240,13 +240,26 @@ $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                     <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
 
-                                        <?php foreach($images as $image){ ?>
+                                        <?php foreach ($images as $image) { ?>
 
-                                            <div class="relative overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700">
+                                            <div class="space-y-2">
 
-                                                <img
-                                                    src="uploads/activities/<?php echo $image['image']; ?>"
-                                                    class="h-40 w-full object-cover" />
+                                                <div class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700">
+
+                                                    <img
+                                                        src="uploads/activities/<?php echo $image['image']; ?>"
+                                                        class="h-40 w-full object-cover" />
+
+                                                </div>
+
+                                                <a
+                                                    href="delete-image.php?id=<?php echo $image['id']; ?>&table=activity_images&folder=uploads/activities&redirect=edit-extra-curricular.php&foreign_key=activity_id"
+                                                    onclick="return confirm('Delete this image?')"
+                                                    class="flex w-full mt-1 items-center justify-center rounded-xl bg-red-500 px-2 py-1 text-sm font-medium text-white transition hover:bg-red-600">
+
+                                                    Delete Image
+
+                                                </a>
 
                                             </div>
 
@@ -334,19 +347,18 @@ $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="../dist/js/app.js"></script>
 
     <script>
+        function addImageField() {
 
-    function addImageField(){
+            const container =
+                document.getElementById('image-fields');
 
-        const container =
-        document.getElementById('image-fields');
+            const wrapper =
+                document.createElement('div');
 
-        const wrapper =
-        document.createElement('div');
+            wrapper.className =
+                'flex items-center gap-3';
 
-        wrapper.className =
-        'flex items-center gap-3';
-
-        wrapper.innerHTML = `
+            wrapper.innerHTML = `
         
             <input
                 type="file"
@@ -363,14 +375,13 @@ $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </button>
         `;
 
-        container.appendChild(wrapper);
-    }
+            container.appendChild(wrapper);
+        }
 
-    function removeImageField(button){
+        function removeImageField(button) {
 
-        button.parentElement.remove();
-    }
-
+            button.parentElement.remove();
+        }
     </script>
 
 </body>

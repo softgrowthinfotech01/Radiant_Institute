@@ -1,3 +1,12 @@
+<?php
+include('../src/conn.php');
+
+$select = $conn->prepare('SELECT * FROM courses WHERE status = 1');
+$select->execute();
+
+$courses = $select->fetchAll(PDO::FETCH_ASSOC);
+// print_r($courses);exit;
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -38,13 +47,13 @@
 
             <!-- LOGO -->
             <a href="home.php">
-  <div class="logo flex items-center -gap-4">
-    <img src="images/r-logo.png" alt=""
-      class="h-12 sm:h-24 md:h-[90px] md:w-[240px] w-auto object-contain">
+                <div class="logo flex items-center -gap-4">
+                    <img src="images/r-logo.png" alt=""
+                        class="h-12 sm:h-24 md:h-[90px] md:w-[240px] w-auto object-contain">
 
- 
-  </div>
-</a>
+
+                </div>
+            </a>
 
             <!-- DESKTOP MENU -->
             <nav class="hidden md:flex gap-8 text-black items-center">
@@ -61,40 +70,22 @@
                         class="absolute left-0 mt-2 w-52 bg-white shadow-lg rounded-lg
       opacity-0 scale-95 invisible transform
       transition-all duration-300 ease-out origin-top">
-
-                        <a href="jee.php" class="block px-4 py-2 hover:bg-blue-50">JEE</a>
-                        <a href="neet.php" class="block px-4 py-2 hover:bg-blue-50">NEET</a>
-                        <a href="mht-cet.php" class="block px-4 py-2 hover:bg-blue-50">MHT-CET</a>
-                        <a href="11-12th.php" class="block px-4 py-2 hover:bg-blue-50">11 + 12th</a>
-                        <a href="crashcourse.php" class="block px-4 py-2 hover:bg-blue-50">Crash - Course</a>
+                        <?php
+                        for ($i = 0; $i < count($courses); $i++) {
+                        ?>
+                            <a href="jee.php" class="block px-4 py-2 hover:bg-blue-50"><?= $courses[$i]['title']; ?></a>
+                        <?php } ?>
                     </div>
                 </div>
 
-                <!-- RESULTS -->
-                <div class="relative">
-                    <button onclick="toggleDropdown('results')"
-                        class="flex items-center gap-1 font-semibold">
-                        Results
-                        <span id="arrow-results" class="transition-transform duration-300 mb-2">⌄</span>
-                    </button>
-
-                    <div id="dropdown-results"
-                        class="absolute left-0 mt-2 w-52 bg-white shadow-lg rounded-lg
-      opacity-0 scale-95 invisible transform
-      transition-all duration-300 ease-out origin-top">
-
-                        <a href="jeeresult.php" class="block px-4 py-2 hover:bg-blue-50">JEE</a>
-                        <a href="neetresult.php" class="block px-4 py-2 hover:bg-blue-50">NEET</a>
-                        <a href="mht-cetresult.php" class="block px-4 py-2 hover:bg-blue-50">MHT-CET</a>
-                        <a href="boardresult.php" class="block px-4 py-2 hover:bg-blue-50">Board</a>
-                    </div>
-                </div>
+                <!-- results -->
+                <a class="font-semibold" href="jeeresult.php">Results</a>
 
                 <!-- ABOUT -->
                 <a class="font-semibold" href="about_us.php">About Us</a>
 
                 <!-- ENQUIRY -->
-               <a class="font-semibold" href="enquiry.php">Enquiry</a>
+                <a class="font-semibold" href="enquiry.php">Enquiry</a>
 
                 <a class="font-semibold" href="extra_curricular_activities.php">Extra - curricular</a>
                 <a class="font-semibold" href="gallary.php">Gallery</a>
@@ -169,7 +160,7 @@
                 </div>
 
                 <!-- ENQUIRY -->
-               <a class="font-semibold" href="enquiry.php">Enquiry</a>
+                <a class="font-semibold" href="enquiry.php">Enquiry</a>
 
                 <!-- NORMAL LINKS -->
                 <a href="about_us.php" class="font-semibold">About Us</a>

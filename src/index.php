@@ -1,11 +1,22 @@
 <?php
 session_start();
+include('conn.php');
 if(!isset($_SESSION['admin'])){
 
     header('location:login');
-
     exit;
+
 }
+
+$courses = $conn->prepare("
+    SELECT 
+        (SELECT COUNT(*) FROM courses) AS course,
+        (SELECT COUNT(*) FROM results) AS results
+");
+
+$courses->execute();
+$all = $courses->fetch(PDO::FETCH_ASSOC);
+// print_r($all);
 ?>
 <!DOCTYPE html>
 <html lang="en" class="h-full">
@@ -43,39 +54,28 @@ if(!isset($_SESSION['admin'])){
           <div class="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p class="text-sm font-medium text-brand-600 dark:text-brand-400">Overview</p>
-              <h2 class="text-display-sm text-slate-900 dark:text-white">Welcome back</h2>
+              <h2 class="text-display-sm text-slate-900 dark:text-white">Welcome back - Radiant Coaching Classes</h2>
               <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">Track performance and recent activity.</p>
             </div>
             <div class="flex gap-2">
-              <button type="button" class="btn btn-secondary">Export</button>
-              <button type="button" class="btn btn-primary">New report</button>
+              <button type="button" onclick="window.location.href='extra-curricular'" class="btn btn-secondary">Extra Curricular Activity</button>
+              <button type="button" onclick="window.location.href='gallery'" class="btn btn-primary">Gallery</button>
             </div>
           </div>
 
           <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-card transition-shadow hover:shadow-card-hover dark:border-slate-800 dark:bg-slate-900">
-              <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Total revenue</p>
-              <p class="mt-2 text-3xl font-semibold tracking-tight">$84,310</p>
-              <p class="mt-2 text-xs font-medium text-emerald-600 dark:text-emerald-400">+12.4% vs last month</p>
+              <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Courses</p>
+              <p class="mt-2 text-3xl font-semibold tracking-tight"><?= $all['course']; ?></p>
             </div>
             <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-card transition-shadow hover:shadow-card-hover dark:border-slate-800 dark:bg-slate-900">
-              <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Active users</p>
-              <p class="mt-2 text-3xl font-semibold tracking-tight">12,482</p>
-              <p class="mt-2 text-xs font-medium text-emerald-600 dark:text-emerald-400">+3.1% vs last week</p>
+              <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Active Results</p>
+              <p class="mt-2 text-3xl font-semibold tracking-tight"><?= $all['results']; ?></p>
             </div>
-            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-card transition-shadow hover:shadow-card-hover dark:border-slate-800 dark:bg-slate-900">
-              <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Bookings</p>
-              <p class="mt-2 text-3xl font-semibold tracking-tight">1,042</p>
-              <p class="mt-2 text-xs font-medium text-amber-600 dark:text-amber-400">-2.0% vs last month</p>
-            </div>
-            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-card transition-shadow hover:shadow-card-hover dark:border-slate-800 dark:bg-slate-900">
-              <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Conversion</p>
-              <p class="mt-2 text-3xl font-semibold tracking-tight">4.8%</p>
-              <p class="mt-2 text-xs font-medium text-emerald-600 dark:text-emerald-400">+0.6 pts</p>
             </div>
           </div>
 
-          <div class="mt-8 grid gap-6 xl:grid-cols-3">
+          <!-- <div class="mt-8 grid gap-6 xl:grid-cols-3">
             <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-card dark:border-slate-800 dark:bg-slate-900 xl:col-span-2">
               <div class="mb-4 flex items-center justify-between gap-4">
                 <h3 class="text-base font-semibold">Revenue</h3>
@@ -182,7 +182,7 @@ if(!isset($_SESSION['admin'])){
                 <button type="button" class="btn btn-secondary w-full">Notification settings</button>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </main>
     </div>

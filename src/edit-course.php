@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(!isset($_SESSION['admin'])){
+if (!isset($_SESSION['admin'])) {
 
     header('location:login');
 
@@ -53,9 +53,61 @@ if (isset($_POST['update_course'])) {
         ':id' => $id
     ]);
 
+    if (isset($_FILES['images'])) {
+
+        foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
+
+            if ($_FILES['images']['error'][$key] == 0) {
+
+                $image_name =
+                    time() . '_' . $_FILES['images']['name'][$key];
+
+                move_uploaded_file(
+                    $tmp_name,
+                    '../uploads/courses/' . $image_name
+                );
+
+                $stmt = $conn->prepare("
+                    INSERT INTO course_images(
+                        course_id,
+                        image
+                    )
+                    VALUES(
+                        :course_id,
+                        :image
+                    )
+                ");
+
+                $stmt->execute([
+                    ':course_id' => $id,
+                    ':image' => $image_name
+                ]);
+            }
+        }
+    }
+
+
     header('location:courses.php');
     exit;
 }
+
+/*
+|--------------------------------------------------------------------------
+| GET RESULT IMAGES
+|--------------------------------------------------------------------------
+*/
+
+$stmt = $conn->prepare("
+    SELECT *
+    FROM course_images
+    WHERE course_id = :id
+");
+
+$stmt->execute([
+    ':id' => $id
+]);
+
+$images = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -176,6 +228,80 @@ if (isset($_POST['update_course'])) {
 
                             </label>
 
+                            <!-- EXISTING IMAGES -->
+
+                            <div>
+
+                                <label class="mb-3 block text-sm font-medium text-slate-700 dark:text-slate-300">
+
+                                    Existing Images
+
+                                </label>
+
+                                <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+
+                                    <?php foreach ($images as $image) { ?>
+
+                                        <div class="relative overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700">
+
+                                            <img
+                                                src="uploads/courses/<?php echo $image['image']; ?>"
+                                                class="h-40 w-full object-cover" />
+
+                                        </div>
+
+                                    <?php } ?>
+
+                                </div>
+
+                            </div>
+
+                            <!-- NEW IMAGES -->
+
+                            <div>
+
+                                <div class="mb-3 flex items-center justify-between">
+
+                                    <label class="text-sm font-medium text-slate-700 dark:text-slate-300">
+
+                                        Add More Images
+
+                                    </label>
+
+                                    <button
+                                        type="button"
+                                        onclick="addImageField()"
+                                        class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-600 text-white shadow-sm transition hover:bg-brand-700">
+
+                                        <svg class="h-5 w-5"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24">
+
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M12 4v16m8-8H4" />
+
+                                        </svg>
+
+                                    </button>
+
+                                </div>
+
+                                <div id="image-fields"
+                                    class="space-y-3">
+
+                                    <input
+                                        type="file"
+                                        name="images[]"
+                                        class="block w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-950" />
+
+                                </div>
+
+                            </div>
+
                             <div class="flex flex-wrap justify-end gap-2 pb-8">
 
                                 <a href="courses.php" class="btn btn-secondary">
@@ -206,6 +332,46 @@ if (isset($_POST['update_course'])) {
     </div>
 
     <script src="../dist/js/app.js"></script>
+
+      <script>
+
+    function addImageField(){
+
+        const container =
+        document.getElementById('image-fields');
+
+        const wrapper =
+        document.createElement('div');
+
+        wrapper.className =
+        'flex items-center gap-3';
+
+        wrapper.innerHTML = `
+        
+            <input
+                type="file"
+                name="images[]"
+                class="block w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-950" />
+
+            <button
+                type="button"
+                onclick="removeImageField(this)"
+                class="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500 text-white">
+
+                ×
+
+            </button>
+        `;
+
+        container.appendChild(wrapper);
+    }
+
+    function removeImageField(button){
+
+        button.parentElement.remove();
+    }
+
+    </script>
 
 </body>
 

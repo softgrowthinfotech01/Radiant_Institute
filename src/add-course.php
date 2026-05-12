@@ -1,10 +1,10 @@
 <?php
 session_start();
-if(!isset($_SESSION['admin'])){
+if (!isset($_SESSION['admin'])) {
 
-    header('location:login');
+  header('location:login');
 
-    exit;
+  exit;
 }
 
 include('conn.php');
@@ -39,6 +39,42 @@ if (isset($_POST['add_course'])) {
     ':description' => $description,
     ':status' => $status
   ]);
+
+  $course_id = $conn->lastInsertId();
+
+  if (isset($_FILES['images'])) {
+
+    foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
+
+      if ($_FILES['images']['error'][$key] == 0) {
+
+        $image_name =
+          time() . '_' . $_FILES['images']['name'][$key];
+
+        move_uploaded_file(
+          $tmp_name,
+          'uploads/courses/' . $image_name
+        );
+
+        $stmt = $conn->prepare("
+                    INSERT INTO course_images(
+                        course_id,
+                        image
+                    )
+                    VALUES(
+                        :course_id,
+                        :image
+                    )
+                ");
+
+        $stmt->execute([
+          ':course_id' => $course_id,
+          ':image' => $image_name
+        ]);
+      }
+    }
+  }
+
 
   header('location:courses.php');
 }
@@ -79,7 +115,7 @@ if (isset($_POST['add_course'])) {
             <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">Insert a New Course name</p>
           </div>
 
-          <form method="POST">
+          <form method="POST" enctype="multipart/form-data">
             <div class="space-y-6">
               <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-card dark:border-slate-800 dark:bg-slate-900">
                 <h3 class="text-base font-semibold">Course</h3>
@@ -104,6 +140,53 @@ if (isset($_POST['add_course'])) {
 
               </label>
 
+              <!-- IMAGES -->
+
+              <div>
+
+                <div class="mb-3 flex items-center justify-between">
+
+                  <label class="text-sm font-medium text-slate-700 dark:text-slate-300">
+
+                    Images
+
+                  </label>
+
+                  <button
+                    type="button"
+                    onclick="addImageField()"
+                    class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-600 text-white shadow-sm transition hover:bg-brand-700">
+
+                    <svg class="h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24">
+
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 4v16m8-8H4" />
+
+                    </svg>
+
+                  </button>
+
+                </div>
+
+                <div id="image-fields"
+                  class="space-y-3">
+
+                  <input
+                    type="file"
+                    name="images[]"
+                    required
+                    class="block w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-950" />
+
+                </div>
+
+              </div>
+
               <div class="flex flex-wrap justify-end gap-2 pb-8">
                 <button type="reset" class="btn btn-secondary">Discard</button>
                 <button
@@ -121,6 +204,45 @@ if (isset($_POST['add_course'])) {
 
   <script src="../dist/js/app.js"></script>
 
+    <script>
+
+    function addImageField(){
+
+        const container =
+        document.getElementById('image-fields');
+
+        const wrapper =
+        document.createElement('div');
+
+        wrapper.className =
+        'flex items-center gap-3';
+
+        wrapper.innerHTML = `
+        
+            <input
+                type="file"
+                name="images[]"
+                class="block w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-950" />
+
+            <button
+                type="button"
+                onclick="removeImageField(this)"
+                class="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500 text-white">
+
+                ×
+
+            </button>
+        `;
+
+        container.appendChild(wrapper);
+    }
+
+    function removeImageField(button){
+
+        button.parentElement.remove();
+    }
+
+    </script>
 
 </body>
 

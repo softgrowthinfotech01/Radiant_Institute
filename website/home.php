@@ -1,3 +1,111 @@
+<?php
+include('../src/conn.php');
+$select = $conn->prepare("
+SELECT 
+    courses.id,
+    courses.title,
+    courses.description,
+    courses.status,
+    COALESCE(
+        JSON_ARRAYAGG(course_images.image),
+        JSON_ARRAY()
+    ) AS images
+FROM courses
+LEFT JOIN course_images 
+    ON courses.id = course_images.course_id
+    AND course_images.image IS NOT NULL
+    AND course_images.image != ''
+WHERE courses.status = 1
+GROUP BY courses.id
+");
+
+$select->execute();
+
+$coursess = $select->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($coursess as &$course) {
+  $course['images'] = json_decode($course['images'], true);
+}
+// echo "<pre>";
+// print_r($coursess);
+// exit;
+
+$extra = $conn->prepare("
+SELECT 
+    extra_curricular_activities.id,
+    extra_curricular_activities.occasion,
+    extra_curricular_activities.description,
+    COALESCE(
+        JSON_ARRAYAGG(activity_images.image),
+        JSON_ARRAY()
+    ) AS images
+FROM extra_curricular_activities
+LEFT JOIN activity_images 
+    ON extra_curricular_activities.id = activity_images.activity_id
+    AND activity_images.image IS NOT NULL
+    AND activity_images.image != ''
+GROUP BY extra_curricular_activities.id
+");
+
+$extra->execute();
+
+$extras = $extra->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($extras as &$course) {
+  $course['images'] = json_decode($course['images'], true);
+}
+// echo "<pre>";
+// print_r($extras);
+// exit;
+
+// gallery
+
+$gallery = $conn->prepare("SELECT image FROM gallery_images");
+$gallery->execute();
+
+$galleries = $gallery->fetchAll(PDO::FETCH_ASSOC);
+
+/*
+|--------------------------------------------------------------------------
+| FETCH ACTIVE CRASH COURSE
+|--------------------------------------------------------------------------
+*/
+
+$stmt = $conn->prepare("
+SELECT 
+    crash_courses.id,
+    crash_courses.title,
+    crash_courses.start_date,
+    crash_courses.duration,
+    crash_courses.description,
+    COALESCE(
+        JSON_ARRAYAGG(crash_course_highlights.highlight),
+        JSON_ARRAY()
+    ) AS images
+FROM crash_courses
+LEFT JOIN crash_course_highlights 
+    ON crash_courses.id = crash_course_highlights.crash_course_id
+    AND crash_course_highlights.highlight IS NOT NULL
+    AND crash_course_highlights.highlight != ''
+
+WHERE crash_courses.status = 1
+
+GROUP BY crash_courses.id
+ORDER BY crash_courses.id DESC
+");
+
+$stmt->execute();
+
+$stmts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($stmts as &$course) {
+  $course['high'] = json_decode($course['images'], true);
+}
+// echo "<pre>";
+// print_r($stmts);
+// exit;
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -155,7 +263,7 @@
     /* our courses animation */
 
     /* ===== FLOATING BACKGROUND LIGHT ===== */
-  
+
 
     @keyframes moveLight {
       0% {
@@ -535,15 +643,15 @@ our result animation end */
   <section class="relative min-h-screen flex items-center justify-center bg-white text-white overflow-hidden px-6 md:px-16 mt-14">
 
     <!-- BACKGROUND -->
-<!-- BACKGROUND WITH WAVE CLIP -->
-<div class="absolute inset-0 overflow-hidden">
+    <!-- BACKGROUND WITH WAVE CLIP -->
+    <div class="absolute inset-0 overflow-hidden">
 
-  <div class="w-full h-full bg-cover bg-center bg-no-repeat
+      <div class="w-full h-full bg-cover bg-center bg-no-repeat
               [clip-path:polygon(0%_0%,100%_0%,100%_85%,75%_92%,50%_85%,25%_92%,0%_85%)]"
-    style="background-image:url('images/hero-bg.png')">
-  </div>
+        style="background-image:url('images/hero-bg.png')">
+      </div>
 
-</div>
+    </div>
 
     <!-- CANVAS -->
     <canvas id="eduCanvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
@@ -568,10 +676,10 @@ our result animation end */
         </p>
 
         <div class="flex gap-4">
-        <a href="enquiry.php"
-   class="inline-block bg-[#E41C2A] px-8 py-3 rounded-lg font-semibold hover:bg-red-700 transition duration-300">
-   Join Now
-</a>
+          <a href="enquiry.php"
+            class="inline-block bg-[#E41C2A] px-8 py-3 rounded-lg font-semibold hover:bg-red-700 transition duration-300">
+            Join Now
+          </a>
 
           <!-- <button class="border border-white px-8 py-3 rounded-lg hover:bg-white hover:text-black font-bold">
             Explore Courses
@@ -581,105 +689,104 @@ our result animation end */
 
       <!-- RIGHT FORM -->
       <!-- RIGHT FORM -->
-<div class="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-6 shadow-2xl max-w-md w-full mx-auto">
+      <div class="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-6 shadow-2xl max-w-md w-full mx-auto">
 
-  <!-- Heading -->
-  <div class="text-center mb-6">
-    <h3 class="text-3xl font-bold text-[#E41C2A]">
-      Book Free Demo
-    </h3>
+        <!-- Heading -->
+        <div class="text-center mb-6">
+          <h3 class="text-3xl font-bold text-[#E41C2A]">
+            Book Free Demo
+          </h3>
 
-    <p class="text-sm text-gray-300">
-      Quick enquiry – get a call back
-    </p>
-  </div>
+          <p class="text-sm text-gray-300">
+            Quick enquiry – get a call back
+          </p>
+        </div>
 
-  <!-- Form -->
-  <form id="enquiryForm" class="space-y-4">
+        <!-- Form -->
+        <form id="enquiryForm" class="space-y-4">
 
-    <!-- Name -->
-    <div class="relative">
-      <input type="text" id="name" required
-        class="peer w-full p-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-yellow-400">
+          <!-- Name -->
+          <div class="relative">
+            <input type="text" id="name" required
+              class="peer w-full p-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-yellow-400">
 
-      <label class="absolute left-3 top-3 text-gray-300 text-sm transition-all 
+            <label class="absolute left-3 top-3 text-gray-300 text-sm transition-all 
         peer-focus:-top-2 peer-focus:text-xs peer-focus:text-yellow-400 
         peer-valid:-top-2 peer-valid:text-xs bg-[#021969] px-1">
 
-        Full Name
+              Full Name
 
-      </label>
-    </div>
+            </label>
+          </div>
 
-    <!-- Phone -->
-    <div class="relative">
-      <input type="tel" id="phone" maxlength="10" required
-        class="peer w-full p-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-yellow-400">
+          <!-- Phone -->
+          <div class="relative">
+            <input type="tel" id="phone" maxlength="10" required
+              class="peer w-full p-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-yellow-400">
 
-      <label class="absolute left-3 top-3 text-gray-300 text-sm transition-all 
+            <label class="absolute left-3 top-3 text-gray-300 text-sm transition-all 
         peer-focus:-top-2 peer-focus:text-xs peer-focus:text-yellow-400 
         peer-valid:-top-2 peer-valid:text-xs bg-[#021969] px-1">
 
-        Phone Number
+              Phone Number
 
-      </label>
+            </label>
+          </div>
+
+          <!-- Course -->
+          <select id="course"
+            class="w-full p-3 rounded-lg bg-transparent border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400">
+
+            <option value="" class="text-black">Select Course</option>
+
+            <option class="text-black">JEE</option>
+            <option class="text-black">NEET</option>
+            <option class="text-black">MHT-CET</option>
+            <option class="text-black">11th & 12th</option>
+            <option class="text-black">Crash Course</option>
+
+          </select>
+
+          <!-- Enquiry Type -->
+          <select id="type"
+            class="w-full p-3 rounded-lg bg-transparent border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400">
+
+            <option value="" class="text-black">Enquiry Type</option>
+
+            <option class="text-black">Demo Class</option>
+            <option class="text-black">More Information</option>
+
+          </select>
+
+          <!-- Button -->
+          <div class="md:col-span-2 flex justify-center">
+
+            <button type="submit"
+              class="relative overflow-hidden bg-green-600 text-white py-3 px-8 rounded-lg font-semibold transition duration-300 hover:scale-105 hover:shadow-lg active:scale-95">
+
+              <span class="relative z-10">
+                Submit Enquiry
+              </span>
+
+              <!-- Ripple -->
+              <span class="absolute inset-0 bg-white opacity-10 scale-0 hover:scale-150 transition duration-500 rounded-full"></span>
+
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
+
     </div>
 
-    <!-- Course -->
-    <select id="course"
-      class="w-full p-3 rounded-lg bg-transparent border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400">
-
-      <option value="" class="text-black">Select Course</option>
-
-      <option class="text-black">JEE</option>
-      <option class="text-black">NEET</option>
-      <option class="text-black">MHT-CET</option>
-      <option class="text-black">11th & 12th</option>
-      <option class="text-black">Crash Course</option>
-
-    </select>
-
-    <!-- Enquiry Type -->
-    <select id="type"
-      class="w-full p-3 rounded-lg bg-transparent border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400">
-
-      <option value="" class="text-black">Enquiry Type</option>
-
-      <option class="text-black">Demo Class</option>
-      <option class="text-black">More Information</option>
-
-    </select>
-
-    <!-- Button -->
-    <div class="md:col-span-2 flex justify-center">
-
-      <button type="submit"
-        class="relative overflow-hidden bg-green-600 text-white py-3 px-8 rounded-lg font-semibold transition duration-300 hover:scale-105 hover:shadow-lg active:scale-95">
-
-        <span class="relative z-10">
-          Submit Enquiry
-        </span>
-
-        <!-- Ripple -->
-        <span class="absolute inset-0 bg-white opacity-10 scale-0 hover:scale-150 transition duration-500 rounded-full"></span>
-
-      </button>
-
-    </div>
-
-  </form>
-
-</div>
-
-    </div>
-    
   </section>
 
   <!-- ================= our courses ================= -->
   <section class="courses-section relative bg-[#E5E8F0] text-gray-800 py-16 px-6 md:px-16 
-bg-cover bg-center bg-no-repeat"
-  >
-  <!-- style="background-image: url('images/redbg1.png');" -->
+bg-cover bg-center bg-no-repeat">
+    <!-- style="background-image: url('images/redbg1.png');" -->
     <!-- HEADING -->
     <div class="text-center mb-14" data-aos="fade-up">
       <h2 class="text-3xl md:text-5xl font-bold text-[#E41C2A] mb-3">
@@ -694,234 +801,105 @@ bg-cover bg-center bg-no-repeat"
     <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
 
       <!-- CARD -->
-      <div data-aos="fade-up" data-aos-delay="100"
-        class="course-card group bg-white/95 backdrop-blur rounded-2xl overflow-hidden 
+      <?php
+      for ($i = 0; $i < count($coursess); $i++) {
+        // print_r($coursess[2]);exit();
+      ?>
+        <div data-aos="fade-up" data-aos-delay="100"
+          class="course-card group bg-white/95 backdrop-blur rounded-2xl overflow-hidden 
       shadow-md hover:shadow-xl transition-all duration-500 
       hover:-translate-y-2">
 
-        <!-- IMAGE -->
-        <div class="overflow-hidden">
-          <img src="images/iit-jee.jpg"
-            class="course-img w-full h-48 object-cover transition duration-700 group-hover:scale-105">
+          <!-- IMAGE -->
+          <div class="overflow-hidden">
+
+            <img src="../src/uploads/courses/<?= $coursess[$i]['images'][0]; ?>"
+              class="course-img w-full h-48 object-cover transition duration-700 group-hover:scale-105">
+          </div>
+
+          <!-- CONTENT -->
+          <div class="p-6 course-content">
+            <h3 class="text-xl font-semibold text-[#E41C2A] mb-2">
+              <?= $coursess[$i]['title']; ?>
+            </h3>
+
+            <p class="text-gray-700 text-sm leading-relaxed">
+              <?= $coursess[$i]['description']; ?>
+            </p>
+
+            <button class="mt-4 text-[#1B3252] font-semibold flex items-center gap-2 group explore-btn">
+              Explore
+              <span class="arrow transition-transform duration-300 group-hover:translate-x-1">→</span>
+            </button>
+          </div>
         </div>
-
-        <!-- CONTENT -->
-        <div class="p-6 course-content">
-          <h3 class="text-xl font-semibold text-[#E41C2A] mb-2">
-            JEE Preparation
-          </h3>
-
-          <p class="text-gray-700 text-sm leading-relaxed">
-            Comprehensive IIT-JEE preparation with strong concept building and test series.
-          </p>
-
-          <button class="mt-4 text-[#1B3252] font-semibold flex items-center gap-2 group explore-btn">
-            Explore
-            <span class="arrow transition-transform duration-300 group-hover:translate-x-1">→</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- CARD 2 -->
-      <div data-aos="fade-up" data-aos-delay="200"
-        class="course-card group bg-white/95 backdrop-blur rounded-2xl overflow-hidden 
-      shadow-md hover:shadow-xl transition-all duration-500 
-      hover:-translate-y-2">
-
-        <div class="overflow-hidden">
-          <img src="images/NEET.png"
-            class="course-img w-full h-48 object-cover transition duration-700 group-hover:scale-105">
-        </div>
-
-        <div class="p-6 course-content">
-          <h3 class="text-xl font-semibold text-[#E41C2A] mb-2">
-            NEET Coaching
-          </h3>
-
-          <p class="text-gray-700 text-sm leading-relaxed">
-            Focused preparation with deep subject understanding and exam strategy.
-          </p>
-
-          <button class="mt-4 text-[#1B3252] font-semibold flex items-center gap-2 group explore-btn">
-            Explore
-            <span class="arrow transition-transform duration-300 group-hover:translate-x-1">→</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- CARD 3 -->
-      <div data-aos="fade-up" data-aos-delay="300"
-        class="course-card group bg-white/95 backdrop-blur rounded-2xl overflow-hidden 
-      shadow-md hover:shadow-xl transition-all duration-500 
-      hover:-translate-y-2">
-
-        <div class="overflow-hidden">
-          <img src="images/mht-cet.png"
-            class="course-img w-full h-48 object-cover transition duration-700 group-hover:scale-105">
-        </div>
-
-        <div class="p-6 course-content">
-          <h3 class="text-xl font-semibold text-[#E41C2A] mb-2">
-            MHT-CET
-          </h3>
-
-          <p class="text-gray-700 text-sm leading-relaxed">
-            CET-focused learning with daily practice and mock test system.
-          </p>
-
-          <button class="mt-4 text-[#1B3252] font-semibold flex items-center gap-2 group explore-btn">
-            Explore
-            <span class="arrow transition-transform duration-300 group-hover:translate-x-1">→</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- CARD 4 -->
-      <div data-aos="fade-up" data-aos-delay="400"
-        class="course-card group bg-white/95 backdrop-blur rounded-2xl overflow-hidden 
-      shadow-md hover:shadow-xl transition-all duration-500 
-      hover:-translate-y-2">
-
-        <div class="overflow-hidden">
-          <img src="images/11-12th.png"
-            class="course-img w-full h-48 object-cover transition duration-700 group-hover:scale-105">
-        </div>
-
-        <div class="p-6 course-content">
-          <h3 class="text-xl font-semibold text-[#E41C2A] mb-2">
-            11th & 12th Foundation
-          </h3>
-
-          <p class="text-gray-700 text-sm leading-relaxed">
-            Strong academic base with board + entrance integrated learning.
-          </p>
-
-          <button class="mt-4 text-[#1B3252] font-semibold flex items-center gap-2 group explore-btn">
-            Explore
-            <span class="arrow transition-transform duration-300 group-hover:translate-x-1">→</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- CARD 5 -->
-      <div data-aos="fade-up" data-aos-delay="500"
-        class="course-card group bg-white/95 backdrop-blur rounded-2xl overflow-hidden 
-      shadow-md hover:shadow-xl transition-all duration-500 
-      hover:-translate-y-2">
-
-        <div class="overflow-hidden">
-          <img src="images/carsh course.png"
-            class="course-img w-full h-48 object-cover transition duration-700 group-hover:scale-105">
-        </div>
-
-        <div class="p-6 course-content">
-          <h3 class="text-xl font-semibold text-[#E41C2A] mb-2">
-            Crash Course
-          </h3>
-
-          <p class="text-gray-700 text-sm leading-relaxed">
-            Fast-track revision with high-impact practice and tests.
-          </p>
-
-          <button class="mt-4 text-[#1B3252] font-semibold flex items-center gap-2 group explore-btn">
-            Explore
-            <span class="arrow transition-transform duration-300 group-hover:translate-x-1">→</span>
-          </button>
-        </div>
-      </div>
+      <?php } ?>
 
     </div>
   </section>
   <!-- form poster -->
-  <section id="crashSection"
-    class="relative py-20 px-6 md:px-16 overflow-hidden bg-cover bg-center bg-no-repeat"
-    style="background-image: url('images/bgwhite1.jpg');">
 
-    <!-- Overlay -->
-    <div class="absolute inset-0 bg-white/10 "></div>
+  <?php if (!empty($stmts)): ?>
 
-    <!-- Content -->
-    <div class="relative z-10 max-w-6xl mx-auto text-center">
+    <section id="crashSection"
+      class="relative py-20 px-6 md:px-16 overflow-hidden bg-cover bg-center bg-no-repeat"
+      style="background-image: url('images/bgwhite1.jpg');">
 
-      <!-- Heading -->
-      <h2 class="crashTitle text-4xl md:text-6xl font-extrabold text-[#E41C2A]">
-        MHT-CET Crash Course
-      </h2>
+      <!-- Overlay -->
+      <div class="absolute inset-0 bg-white/10 "></div>
 
-      <!-- Subtext -->
-      <p class="crashSub text-lg md:text-xl mt-4 text-gray-800">
-        Special Intensive Batch for Class 12 Students 🚀
-      </p>
+      <?php
+      for ($i = 0; $i < count($stmts); $i++) {
+      ?>
+        <!-- Content -->
+        <div class="relative z-10 max-w-6xl mx-auto text-center">
 
-      <!-- Badge -->
-      <div class="badge inline-block mt-6 px-6 py-2 bg-yellow-400 text-black font-semibold rounded-full shadow-lg">
-        Batch Starts: 22nd February
-      </div>
+          <!-- Heading -->
+          <h2 class="crashTitle text-4xl md:text-6xl font-extrabold text-[#E41C2A]">
+            <?= htmlspecialchars($stmts[$i]['title']) ?>
+          </h2>
 
-      <!-- Glass Card -->
-      <div class="card mt-12 backdrop-blur-xl bg-[#E5E8F0] border border-white/20 p-10 rounded-3xl shadow-2xl">
+          <!-- Subtext -->
+          <p class="crashSub text-lg md:text-xl mt-4 text-gray-800">
+            <?= htmlspecialchars($stmts[$i]['description']) ?>
+          </p>
 
-        <h3 class="text-2xl font-bold mb-6 text-yellow-700">
-          Course Highlights
-        </h3>
-
-        <!-- Features -->
-        <div class="grid md:grid-cols-2 gap-6 text-left">
-
-          <div class="feature flex items-start gap-3">
-            <span class="text-green-500 text-xl">✔</span>
-            <p class="text-gray-800">Daily 6 Hours Power-packed Classes (PCM/Biology)</p>
+          <!-- Badge -->
+          <div class="badge inline-block mt-6 px-6 py-2 bg-yellow-400 text-black font-semibold rounded-full shadow-lg">
+            Batch Starts: <?= date('d F', strtotime($stmts[$i]['start_date'])) ?>
           </div>
+          <!-- Glass Card -->
+          <div class="card mt-12 backdrop-blur-xl bg-[#E5E8F0] border border-white/20 p-10 rounded-3xl shadow-2xl">
 
-          <div class="feature flex items-start gap-3">
-            <span class="text-green-500 text-xl">✔</span>
-            <p class="text-gray-800">Topic-wise Concept Building + Shortcut Tricks</p>
+            <h3 class="text-2xl font-bold mb-6 text-yellow-700">
+              Course Highlights
+            </h3>
+
+            <!-- Features -->
+            <div class="grid md:grid-cols-2 gap-6 text-left">
+              <?php
+              foreach ($stmts[$i]['high'] as $highlight) {
+              ?>
+                <div class="feature flex items-start gap-3">
+                  <span class="text-green-500 text-xl">✔</span>
+                  <p class="text-gray-800"><?= htmlspecialchars($highlight) ?></p>
+                </div>
+
+              <?php } ?>
+            </div>
+            <!-- CTA -->
+            <div class="mt-10 text-center">
+              <a href="enquiry.php"
+                class="ctaBtn inline-block px-8 py-3 bg-green-500 text-black font-bold rounded-full shadow-lg hover:scale-105 transition duration-300">
+                Enroll Now
+              </a>
+            </div>
+
           </div>
-
-          <div class="feature flex items-start gap-3">
-            <span class="text-green-500 text-xl">✔</span>
-            <p class="text-gray-800">Daily Chapter-wise Practice Worksheets</p>
-          </div>
-
-          <div class="feature flex items-start gap-3">
-            <span class="text-green-500 text-xl">✔</span>
-            <p class="text-gray-800">Regular Online MHT-CET Pattern Tests</p>
-          </div>
-
-          <div class="feature flex items-start gap-3">
-            <span class="text-green-500 text-xl">✔</span>
-            <p class="text-gray-800">5+ Full-Length Mock Tests with Analysis</p>
-          </div>
-
-          <div class="feature flex items-start gap-3">
-            <span class="text-green-500 text-xl">✔</span>
-            <p class="text-gray-800">Doubt Solving Sessions with Experts</p>
-          </div>
-
-          <div class="feature flex items-start gap-3">
-            <span class="text-green-500 text-xl">✔</span>
-            <p class="text-gray-800">Focused Exam Strategy & Time Management</p>
-          </div>
-
-          <div class="feature flex items-start gap-3">
-            <span class="text-green-500 text-xl">✔</span>
-            <p class="text-gray-800">Rank Booster Modules & Important Questions</p>
-          </div>
-
         </div>
-
-        <!-- CTA -->
-        <div class="mt-10 text-center">
-          <a href="enquiry.php"
-   class="ctaBtn inline-block px-8 py-3 bg-green-500 text-black font-bold rounded-full shadow-lg hover:scale-105 transition duration-300">
-   Enroll Now
-</a>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
+      <?php } ?>
+    </section>
+  <?php endif; ?>
   <!-- result -->
   <section class="bg-primary text-white py-16 px-6 md:px-16 bg-cover bg-no-repeat " style="background-image: url('images/ourresultbg.jpg');">
     <!-- Heading -->
@@ -1047,75 +1025,24 @@ bg-cover bg-center bg-no-repeat"
     <!-- Cards -->
     <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
 
-      <!-- CARD -->
-      <div class="card group" onmousemove="tilt(event,this)" onmouseleave="resetTilt(this)">
-        <div class="card-inner">
+      <?php
+      for ($i = 0; $i < count($extras); $i++) {
+      ?>
+        <!-- CARD -->
+        <div class="card group" onmousemove="tilt(event,this)" onmouseleave="resetTilt(this)">
+          <div class="card-inner">
 
-          <img src="https://images.unsplash.com/photo-1552664730-d307ca884978"
-            class="img">
+            <img src="../src/uploads/activities/<?php echo $extras[$i]['images'][0]; ?>"
+              class="img">
 
-          <div class="overlay">
-            <h3>Career Seminars</h3>
-            <p>Guidance sessions by experts for career clarity and planning.</p>
-          </div>
+            <div class="overlay">
+              <h3><?= $extras[$i]['occasion']; ?></h3>
+              <p><?= $extras[$i]['description']; ?></p>
+            </div>
 
-        </div>
-      </div>
-
-      <!-- CARD -->
-      <div class="card group" onmousemove="tilt(event,this)" onmouseleave="resetTilt(this)">
-        <div class="card-inner">
-          <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d" class="img">
-          <div class="overlay">
-            <h3>Skill Workshops</h3>
-            <p>Hands-on sessions to improve problem-solving and technical skills.</p>
           </div>
         </div>
-      </div>
-
-      <!-- CARD -->
-      <div class="card group" onmousemove="tilt(event,this)" onmouseleave="resetTilt(this)">
-        <div class="card-inner">
-          <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b" class="img">
-          <div class="overlay">
-            <h3>Sports & Fitness</h3>
-            <p>Activities that promote health, teamwork and discipline.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- CARD -->
-      <div class="card group" onmousemove="tilt(event,this)" onmouseleave="resetTilt(this)">
-        <div class="card-inner">
-          <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b" class="img">
-          <div class="overlay">
-            <h3>Competitions</h3>
-            <p>Quiz, olympiads & contests to boost confidence and performance.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- CARD -->
-      <div class="card group" onmousemove="tilt(event,this)" onmouseleave="resetTilt(this)">
-        <div class="card-inner">
-          <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f" class="img">
-          <div class="overlay">
-            <h3>Personality Development</h3>
-            <p>Communication, confidence and leadership skill development.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- CARD -->
-      <div class="card group" onmousemove="tilt(event,this)" onmouseleave="resetTilt(this)">
-        <div class="card-inner">
-          <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30" class="img">
-          <div class="overlay">
-            <h3>Annual Events</h3>
-            <p>Cultural and fun events to create a balanced learning environment.</p>
-          </div>
-        </div>
-      </div>
+      <?php } ?>
 
     </div>
   </section>
@@ -1144,80 +1071,17 @@ bg-cover bg-center bg-no-repeat"
 
         <div class="slider-track flex gap-6 sm:gap-8 md:gap-10">
 
-          <!-- CARD -->
-          <div class="bg-[#FDFDFD]/90 backdrop-blur p-4 sm:p-5 rounded-xl shadow-lg 
+          <?php
+          for ($i = 0; $i < count($galleries); $i++) {
+            // print_r($galleries);exit;
+          ?>
+            <!-- CARD -->
+            <div class="bg-[#FDFDFD]/90 backdrop-blur p-4 sm:p-5 rounded-xl shadow-lg 
           w-[220px] sm:w-64 md:w-72 flex-shrink-0 card">
-            <img src="images/radient-1.jpeg"
-              class="rounded-lg w-full h-40 sm:h-44 md:h-72 object-cover">
-          </div>
-
-          <div class="bg-[#FDFDFD]/90 backdrop-blur p-4 sm:p-5 rounded-xl shadow-lg 
-          w-[220px] sm:w-64 md:w-72 flex-shrink-0 card">
-            <img src="images/radient-2.jpeg"
-              class="rounded-lg w-full h-40 sm:h-44 md:h-72 object-cover">
-          </div>
-
-          <div class="bg-[#FDFDFD]/90 backdrop-blur p-4 sm:p-5 rounded-xl shadow-lg 
-          w-[220px] sm:w-64 md:w-72 flex-shrink-0 card">
-            <img src="images/radient-3.jpeg"
-              class="rounded-lg w-full h-40 sm:h-44 md:h-72 object-cover">
-          </div>
-
-          <div class="bg-[#FDFDFD]/90 backdrop-blur p-4 sm:p-5 rounded-xl shadow-lg 
-          w-[220px] sm:w-64 md:w-72 flex-shrink-0 card">
-            <img src="images/radient-4.jpeg"
-              class="rounded-lg w-full h-40 sm:h-44 md:h-72 object-cover">
-          </div>
-
-          <div class="bg-[#FDFDFD]/90 backdrop-blur p-4 sm:p-5 rounded-xl shadow-lg 
-          w-[220px] sm:w-64 md:w-72 flex-shrink-0 card">
-            <img src="images/radient-5.jpeg"
-              class="rounded-lg w-full h-40 sm:h-44 md:h-72 object-cover">
-          </div>
-
-          <div class="bg-[#FDFDFD]/90 backdrop-blur p-4 sm:p-5 rounded-xl shadow-lg 
-          w-[220px] sm:w-64 md:w-72 flex-shrink-0 card">
-            <img src="images/radient-6.jpeg"
-              class="rounded-lg w-full h-40 sm:h-44 md:h-72 object-cover">
-          </div>
-
-          <div class="bg-[#FDFDFD]/90 backdrop-blur p-4 sm:p-5 rounded-xl shadow-lg 
-          w-[220px] sm:w-64 md:w-72 flex-shrink-0 card">
-            <img src="images/radient-7.jpeg"
-              class="rounded-lg w-full h-40 sm:h-44 md:h-72 object-cover">
-          </div>
-
-          <div class="bg-[#FDFDFD]/90 backdrop-blur p-4 sm:p-5 rounded-xl shadow-lg 
-          w-[220px] sm:w-64 md:w-72 flex-shrink-0 card">
-            <img src="images/radient-8.jpeg"
-              class="rounded-lg w-full h-40 sm:h-44 md:h-72 object-cover">
-          </div>
-
-          <!-- DUPLICATE (for loop effect) -->
-
-          <div class="bg-[#FDFDFD]/90 backdrop-blur p-4 sm:p-5 rounded-xl shadow-lg 
-          w-[220px] sm:w-64 md:w-72 flex-shrink-0 card">
-            <img src="images/radient-9.jpeg"
-              class="rounded-lg w-full h-40 sm:h-44 md:h-72 object-cover">
-          </div>
-
-          <div class="bg-[#FDFDFD]/90 backdrop-blur p-4 sm:p-5 rounded-xl shadow-lg 
-          w-[220px] sm:w-64 md:w-72 flex-shrink-0 card">
-            <img src="images/radinet-10.jpeg"
-              class="rounded-lg w-full h-40 sm:h-44 md:h-72 object-cover">
-          </div>
-
-          <div class="bg-[#FDFDFD]/90 backdrop-blur p-4 sm:p-5 rounded-xl shadow-lg 
-          w-[220px] sm:w-64 md:w-72 flex-shrink-0 card">
-            <img src="images/radient-11.jpeg"
-              class="rounded-lg w-full h-40 sm:h-44 md:h-72 object-cover">
-          </div>
-
-          <div class="bg-[#FDFDFD]/90 backdrop-blur p-4 sm:p-5 rounded-xl shadow-lg 
-          w-[220px] sm:w-64 md:w-72 flex-shrink-0 card">
-            <img src="images/radient-12.jpeg"
-              class="rounded-lg w-full h-40 sm:h-44 md:h-72 object-cover">
-          </div>
+              <img src="../src/uploads/gallery/<?php echo $galleries[$i]['image']; ?>"
+                class="rounded-lg w-full h-40 sm:h-44 md:h-72 object-cover">
+            </div>
+          <?php } ?>
 
         </div>
       </div>
@@ -1691,68 +1555,66 @@ Message: ${message}`;
   </script>
 
 
-<!-- whatsapp redirect -->
-<script>
+  <!-- whatsapp redirect -->
+  <script>
+    document.getElementById("enquiryForm").addEventListener("submit", function(e) {
 
-document.getElementById("enquiryForm").addEventListener("submit", function(e){
+      e.preventDefault();
 
-    e.preventDefault();
+      // VALUES
+      let name = document.getElementById("name").value.trim();
+      let phone = document.getElementById("phone").value.trim();
+      let course = document.getElementById("course").value;
+      let type = document.getElementById("type").value;
 
-    // VALUES
-    let name = document.getElementById("name").value.trim();
-    let phone = document.getElementById("phone").value.trim();
-    let course = document.getElementById("course").value;
-    let type = document.getElementById("type").value;
+      // ===== VALIDATION =====
 
-    // ===== VALIDATION =====
-
-    // NAME VALIDATION
-    if(name.length < 3){
+      // NAME VALIDATION
+      if (name.length < 3) {
         alert("Please enter valid full name");
         return;
-    }
+      }
 
-    // PHONE VALIDATION
-    let phonePattern = /^[6-9]\d{9}$/;
+      // PHONE VALIDATION
+      let phonePattern = /^[6-9]\d{9}$/;
 
-    if(!phonePattern.test(phone)){
+      if (!phonePattern.test(phone)) {
         alert("Please enter valid 10 digit mobile number");
         return;
-    }
+      }
 
-    // COURSE VALIDATION
-    if(course === ""){
+      // COURSE VALIDATION
+      if (course === "") {
         alert("Please select course");
         return;
-    }
+      }
 
-    // TYPE VALIDATION
-    if(type === ""){
+      // TYPE VALIDATION
+      if (type === "") {
         alert("Please select enquiry type");
         return;
-    }
+      }
 
-    // ===== WHATSAPP MESSAGE =====
+      // ===== WHATSAPP MESSAGE =====
 
-    let whatsappMessage =
-`🎓 *New Enquiry - Radiant Coaching* %0A%0A
+      let whatsappMessage =
+        `🎓 *New Enquiry - Radiant Coaching* %0A%0A
 👤 Name: ${name}%0A
 📞 Phone: ${phone}%0A
 📚 Course: ${course}%0A
 📝 Enquiry Type: ${type}`;
 
-    // YOUR WHATSAPP NUMBER
-    let whatsappNumber = "918421783479";
+      // YOUR WHATSAPP NUMBER
+      let whatsappNumber = "918421783479";
 
-    // REDIRECT TO WHATSAPP
-    window.open(
-      `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`,
-      "_blank"
-    );
+      // REDIRECT TO WHATSAPP
+      window.open(
+        `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`,
+        "_blank"
+      );
 
-});
-
-</script>
+    });
+  </script>
 </body>
 
 </html>

@@ -7,7 +7,7 @@ if (!isset($_SESSION['admin'])) {
   exit;
 }
 
-include('conn.php');
+include('../conn.php');
 
 $search = $_GET['search'] ?? '';
 

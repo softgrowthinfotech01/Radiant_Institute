@@ -141,10 +141,6 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                         <div class="min-w-0 flex-1">
 
-                            <p class="text-sm font-medium text-brand-600 dark:text-brand-400">
-                                Gallery
-                            </p>
-
                             <h2 class="text-display-sm text-slate-900 dark:text-white">
                                 Add Result
                             </h2>

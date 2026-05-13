@@ -292,9 +292,8 @@ $crash_courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                     <?php
                                                     echo
 
-                                                    date('d M Y', strtotime($social_link['created_at']))
+                                                    date('d M Y', strtotime($social_link['start_date']))
                                                     ?>
-
                                                 </td>
                                                 <td class="px-4 py-3 lg:px-6">
 
@@ -315,10 +314,11 @@ $crash_courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 </td>
                                                 <td class="px-4 py-3 lg:px-6">
 
+
                                                     <?php
                                                     echo
 
-                                                    date('d M Y', strtotime($social_link['start_date']))
+                                                    date('d M Y', strtotime($social_link['created_at']))
                                                     ?>
 
                                                 </td>

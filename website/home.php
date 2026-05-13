@@ -852,7 +852,7 @@ bg-cover bg-center bg-no-repeat">
       for ($i = 0; $i < count($stmts); $i++) {
       ?>
         <!-- Content -->
-        <div class="relative z-10 max-w-6xl mx-auto text-center">
+        <div class="relative z-10 max-w-6xl mt-10 mx-auto text-center">
 
           <!-- Heading -->
           <h2 class="crashTitle text-4xl md:text-6xl font-extrabold text-[#E41C2A]">
@@ -887,17 +887,17 @@ bg-cover bg-center bg-no-repeat">
 
               <?php } ?>
             </div>
-            <!-- CTA -->
+
+          </div>
+        </div>
+      <?php } ?>
+       <!-- CTA -->
             <div class="mt-10 text-center">
               <a href="enquiry.php"
                 class="ctaBtn inline-block px-8 py-3 bg-green-500 text-black font-bold rounded-full shadow-lg hover:scale-105 transition duration-300">
                 Enroll Now
               </a>
             </div>
-
-          </div>
-        </div>
-      <?php } ?>
     </section>
   <?php endif; ?>
   <!-- result -->

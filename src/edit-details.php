@@ -109,7 +109,7 @@ if (isset($_POST['update_details'])) {
 
         move_uploaded_file(
             $_FILES['highlight_image']['tmp_name'],
-            '../uploads/course-details/' . $highlight_image
+            'uploads/course-details/' . $highlight_image
         );
     }
 
@@ -180,7 +180,7 @@ if (isset($_POST['update_details'])) {
 
     ]);
 
-    header('location:details.php');
+    header('location:course-details.php');
 
     exit;
 }
@@ -293,7 +293,9 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                 <select
                                     name="course_id"
+                                    style="cursor:not-allowed;"
                                     required
+                                    disabled
                                     class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-950">
 
                                     <option value="">

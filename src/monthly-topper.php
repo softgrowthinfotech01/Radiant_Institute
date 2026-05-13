@@ -1,5 +1,7 @@
 <?php
+
 session_start();
+
 if(!isset($_SESSION['admin'])){
 
     header('location:login');
@@ -26,24 +28,21 @@ $offset = ($page - 1) * $limit;
 */
 
 $query = "
-SELECT
-social_links.*,
-(
-    SELECT image
-    FROM social_link_images
-    WHERE social_link_images.social_link_id = social_links.id
-    LIMIT 1
-) as preview_image
-FROM social_links
+SELECT *
+FROM monthly_toppers
 WHERE 1
 ";
 
 $params = [];
 
-if ($search != '') {
+if($search != ''){
 
     $query .= "
-    AND title LIKE :search
+    AND (
+        student_name LIKE :search
+        OR course_name LIKE :search
+        OR month LIKE :search
+    )
     ";
 
     $params[':search'] = "%$search%";
@@ -57,14 +56,18 @@ if ($search != '') {
 
 $countQuery = "
 SELECT COUNT(*) as total
-FROM social_links
+FROM monthly_toppers
 WHERE 1
 ";
 
-if ($search != '') {
+if($search != ''){
 
     $countQuery .= "
-    AND title LIKE :search
+    AND (
+        student_name LIKE :search
+        OR course_name LIKE :search
+        OR month LIKE :search
+    )
     ";
 }
 
@@ -73,10 +76,10 @@ $countStmt = $conn->prepare($countQuery);
 $countStmt->execute($params);
 
 $totalRecords =
-    $countStmt->fetch(PDO::FETCH_ASSOC)['total'];
+$countStmt->fetch(PDO::FETCH_ASSOC)['total'];
 
 $totalPages =
-    ceil($totalRecords / $limit);
+ceil($totalRecords / $limit);
 
 /*
 |--------------------------------------------------------------------------
@@ -85,7 +88,7 @@ $totalPages =
 */
 
 $query .= "
-ORDER BY social_links.id DESC
+ORDER BY id DESC
 LIMIT $limit OFFSET $offset
 ";
 
@@ -93,7 +96,7 @@ $stmt = $conn->prepare($query);
 
 $stmt->execute($params);
 
-$social_links = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$toppers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -107,7 +110,7 @@ $social_links = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0" />
 
-    <title>Social Links — Admin</title>
+    <title>Monthly Topper — Admin</title>
 
     <link rel="preconnect"
         href="https://fonts.googleapis.com" />
@@ -148,7 +151,7 @@ $social_links = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                             <h2 class="text-display-sm text-slate-900 dark:text-white">
 
-                                Social Links
+                                Monthly Topper
 
                             </h2>
 
@@ -156,7 +159,7 @@ $social_links = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                         <button
                             type="button"
-                            onclick="window.location.href='add-social-links'"
+                            onclick="window.location.href='add-topper.php'"
                             class="btn btn-primary shrink-0">
 
                             <svg class="h-4 w-4"
@@ -172,7 +175,7 @@ $social_links = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                             </svg>
 
-                            Add Social Link
+                            Add Topper
 
                         </button>
 
@@ -206,7 +209,7 @@ $social_links = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         type="search"
                                         name="search"
                                         value="<?php echo $search; ?>"
-                                        placeholder="Search social link..."
+                                        placeholder="Search topper..."
                                         class="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-sm outline-none ring-brand-500/30 placeholder:text-slate-400 focus:border-brand-300 focus:bg-white focus:ring-4 dark:border-slate-700 dark:bg-slate-950 dark:focus:bg-slate-950" />
 
                                 </div>
@@ -227,7 +230,7 @@ $social_links = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                         <div class="overflow-x-auto">
 
-                            <table class="w-full min-w-[640px] text-left text-sm">
+                            <table class="w-full min-w-[900px] text-left text-sm">
 
                                 <thead class="border-b border-slate-100 bg-slate-50 text-xs uppercase tracking-wide text-slate-500 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-400">
 
@@ -238,15 +241,15 @@ $social_links = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         </th>
 
                                         <th class="px-4 py-3 font-semibold lg:px-6">
-                                            Title
+                                            Student Name
                                         </th>
 
                                         <th class="px-4 py-3 font-semibold lg:px-6">
-                                            Link
+                                            Course
                                         </th>
 
                                         <th class="px-4 py-3 font-semibold lg:px-6">
-                                            Description
+                                            Date
                                         </th>
 
                                         <th class="px-4 py-3 font-semibold lg:px-6">
@@ -267,27 +270,19 @@ $social_links = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                 <tbody>
 
-                                    <?php if (count($social_links) > 0) { ?>
+                                    <?php if(count($toppers) > 0){ ?>
 
-                                        <?php foreach ($social_links as $social_link) { ?>
+                                        <?php foreach($toppers as $topper){ ?>
 
                                             <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
 
                                                 <td class="px-4 py-3 lg:px-6">
 
-                                                    <?php if ($social_link['preview_image']) { ?>
+                                                    <?php if($topper['image']){ ?>
 
                                                         <img
-                                                            src="uploads/social-links/<?php echo $social_link['preview_image']; ?>"
-                                                            class="h-14 w-14 rounded-lg object-cover border border-slate-200 dark:border-slate-700" />
-
-                                                    <?php } else { ?>
-
-                                                        <div class="flex h-14 w-14 items-center justify-center rounded-lg bg-slate-100 text-xs text-slate-400 dark:bg-slate-800">
-
-                                                            No Image
-
-                                                        </div>
+                                                            src="uploads/monthly-toppers/<?php echo $topper['image']; ?>"
+                                                            class="h-14 w-14 rounded-lg border border-slate-200 object-cover dark:border-slate-700" />
 
                                                     <?php } ?>
 
@@ -297,7 +292,7 @@ $social_links = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                                     <div class="font-medium">
 
-                                                        <?php echo $social_link['title']; ?>
+                                                        <?php echo $topper['student_name']; ?>
 
                                                     </div>
 
@@ -305,29 +300,27 @@ $social_links = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                                 <td class="px-4 py-3 lg:px-6">
 
-                                                    <a
-                                                        href="<?php echo $social_link['link']; ?>"
-                                                        target="_blank"
-                                                        class="text-brand-600 hover:underline">
-
-                                                        Visit Link
-
-                                                    </a>
+                                                    <?php echo $topper['course_name']; ?>
 
                                                 </td>
 
                                                 <td class="px-4 py-3 lg:px-6">
 
-                                                    <?php echo $social_link['description']; ?>
+    <?php
+    echo date(
+        'd M Y',
+        strtotime($topper['topper_date'])
+    );
+    ?>
 
-                                                </td>
+</td>
 
                                                 <td class="px-4 py-3 lg:px-6">
 
                                                     <?php
                                                     echo date(
                                                         'd M Y',
-                                                        strtotime($social_link['created_at'])
+                                                        strtotime($topper['created_at'])
                                                     );
                                                     ?>
 
@@ -338,7 +331,7 @@ $social_links = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                     <?php
                                                     echo date(
                                                         'd M Y',
-                                                        strtotime($social_link['updated_at'])
+                                                        strtotime($topper['updated_at'])
                                                     );
                                                     ?>
 
@@ -347,7 +340,7 @@ $social_links = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 <td class="px-4 py-3 text-right lg:px-6">
 
                                                     <a
-                                                        href="edit-social-links?id=<?php echo $social_link['id']; ?>"
+                                                        href="edit-topper.php?id=<?php echo $topper['id']; ?>"
                                                         class="btn btn-secondary px-2 py-1 text-xs">
 
                                                         Edit
@@ -355,8 +348,8 @@ $social_links = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                     </a>
 
                                                     <a
-                                                        href="delete-social-links?id=<?php echo $social_link['id']; ?>"
-                                                        onclick="return confirm('Delete this social link?')"
+                                                        href="delete-topper.php?id=<?php echo $topper['id']; ?>"
+                                                        onclick="return confirm('Delete this topper?')"
                                                         class="btn btn-secondary px-2 py-1 text-xs">
 
                                                         Delete
@@ -376,7 +369,7 @@ $social_links = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <td colspan="7"
                                                 class="px-4 py-10 text-center text-slate-500 dark:text-slate-400">
 
-                                                No Social Links Found
+                                                No Topper Found
 
                                             </td>
 
@@ -400,7 +393,7 @@ $social_links = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                 <span class="font-medium text-slate-900 dark:text-white">
 
-                                    <?php echo count($social_links); ?>
+                                    <?php echo count($toppers); ?>
 
                                 </span>
 
@@ -412,13 +405,13 @@ $social_links = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                 </span>
 
-                                social links
+                                toppers
 
                             </p>
 
                             <div class="flex items-center gap-2">
 
-                                <?php if ($page > 1) { ?>
+                                <?php if($page > 1){ ?>
 
                                     <a
                                         href="?page=<?php echo $page - 1; ?>&search=<?php echo $search; ?>"
@@ -430,7 +423,7 @@ $social_links = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                 <?php } ?>
 
-                                <?php for ($i = 1; $i <= $totalPages; $i++) { ?>
+                                <?php for($i = 1; $i <= $totalPages; $i++){ ?>
 
                                     <a
                                         href="?page=<?php echo $i; ?>&search=<?php echo $search; ?>"
@@ -439,13 +432,14 @@ $social_links = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                         <?php
 
-                                        if ($page == $i) {
+                                        if($page == $i){
 
                                             echo '
                                             bg-brand-600
                                             text-white
                                             ';
-                                        } else {
+
+                                        }else{
 
                                             echo '
                                             border border-slate-200
@@ -466,7 +460,7 @@ $social_links = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                 <?php } ?>
 
-                                <?php if ($page < $totalPages) { ?>
+                                <?php if($page < $totalPages){ ?>
 
                                     <a
                                         href="?page=<?php echo $page + 1; ?>&search=<?php echo $search; ?>"

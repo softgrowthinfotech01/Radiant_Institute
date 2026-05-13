@@ -1,61 +1,27 @@
 <?php
 
+session_start();
+
+if(!isset($_SESSION['admin'])){
+
+    header('location:login');
+
+    exit;
+}
+
 include('../conn.php');
 
 $id = $_GET['id'];
 
 /*
 |--------------------------------------------------------------------------
-| DELETE ACTIVITY IMAGES FROM FOLDER
+| GET DETAIL IMAGE
 |--------------------------------------------------------------------------
 */
 
 $stmt = $conn->prepare("
-    SELECT *
-    FROM activity_images
-    WHERE activity_id = :id
-");
-
-$stmt->execute([
-    ':id' => $id
-]);
-
-$images = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-foreach($images as $image){
-
-    $file_path =
-    'uploads/activities/'.$image['image'];
-
-    if(file_exists($file_path)){
-
-        unlink($file_path);
-    }
-}
-
-/*
-|--------------------------------------------------------------------------
-| DELETE IMAGES FROM DB
-|--------------------------------------------------------------------------
-*/
-
-$stmt = $conn->prepare("
-    DELETE FROM activity_images
-    WHERE activity_id = :id
-");
-
-$stmt->execute([
-    ':id' => $id
-]);
-
-/*
-|--------------------------------------------------------------------------
-| DELETE ACTIVITY
-|--------------------------------------------------------------------------
-*/
-
-$stmt = $conn->prepare("
-    DELETE FROM extra_curricular_activities
+    SELECT highlight_image
+    FROM course_details
     WHERE id = :id
 ");
 
@@ -63,7 +29,42 @@ $stmt->execute([
     ':id' => $id
 ]);
 
-header('location:extra-curricular');
+$detail = $stmt->fetch(PDO::FETCH_ASSOC);
+
+/*
+|--------------------------------------------------------------------------
+| DELETE IMAGE FROM FOLDER
+|--------------------------------------------------------------------------
+*/
+
+if(
+    $detail['highlight_image'] &&
+    file_exists(
+        '../uploads/course-details/'.$detail['highlight_image']
+    )
+){
+
+    unlink(
+        '../uploads/course-details/'.$detail['highlight_image']
+    );
+}
+
+/*
+|--------------------------------------------------------------------------
+| DELETE DETAILS
+|--------------------------------------------------------------------------
+*/
+
+$stmt = $conn->prepare("
+    DELETE FROM course_details
+    WHERE id = :id
+");
+
+$stmt->execute([
+    ':id' => $id
+]);
+
+header('location:details.php');
 
 exit;
 

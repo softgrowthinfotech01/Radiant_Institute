@@ -7,7 +7,7 @@ if(!isset($_SESSION['admin'])){
     exit;
 }
 
-include('conn.php');
+include('../conn.php');
 
 if(isset($_POST['save_result'])){
 
@@ -140,10 +140,6 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
 
                         <div class="min-w-0 flex-1">
-
-                            <p class="text-sm font-medium text-brand-600 dark:text-brand-400">
-                                Gallery
-                            </p>
 
                             <h2 class="text-display-sm text-slate-900 dark:text-white">
                                 Add Result

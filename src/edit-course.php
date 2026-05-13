@@ -7,7 +7,7 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
-include('conn.php');
+include('../conn.php');
 
 $id = $_GET['id'];
 

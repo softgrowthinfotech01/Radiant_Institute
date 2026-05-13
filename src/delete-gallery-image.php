@@ -11,17 +11,19 @@ if(!isset($_SESSION['admin'])){
 
 include('../conn.php');
 
+include('delete-image-function.php');
+
 $id = $_GET['id'];
 
 /*
 |--------------------------------------------------------------------------
-| GET DETAIL IMAGE
+| GET IMAGE
 |--------------------------------------------------------------------------
 */
 
 $stmt = $conn->prepare("
-    SELECT highlight_image
-    FROM course_details
+    SELECT *
+    FROM gallery_images
     WHERE id = :id
 ");
 
@@ -29,7 +31,7 @@ $stmt->execute([
     ':id' => $id
 ]);
 
-$detail = $stmt->fetch(PDO::FETCH_ASSOC);
+$image = $stmt->fetch(PDO::FETCH_ASSOC);
 
 /*
 |--------------------------------------------------------------------------
@@ -37,34 +39,33 @@ $detail = $stmt->fetch(PDO::FETCH_ASSOC);
 |--------------------------------------------------------------------------
 */
 
-if(
-    $detail['highlight_image'] &&
-    file_exists(
-        '../uploads/course-details/'.$detail['highlight_image']
-    )
-){
-
-    unlink(
-        '../uploads/course-details/'.$detail['highlight_image']
-    );
-}
+deleteImage(
+    '../uploads/gallery',
+    $image['image']
+);
 
 /*
 |--------------------------------------------------------------------------
-| DELETE DETAILS
+| DELETE IMAGE FROM DATABASE
 |--------------------------------------------------------------------------
 */
 
-$stmt = $conn->prepare("
-    DELETE FROM course_details
-    WHERE id = :id
-");
+deleteImageRecord(
+    $conn,
+    'gallery_images',
+    $id
+);
 
-$stmt->execute([
-    ':id' => $id
-]);
+/*
+|--------------------------------------------------------------------------
+| REDIRECT
+|--------------------------------------------------------------------------
+*/
 
-header('location:course-details.php');
+header(
+    'location:edit-gallery.php?id='.
+    $image['gallery_id']
+);
 
 exit;
 

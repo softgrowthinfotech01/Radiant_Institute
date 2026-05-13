@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: May 08, 2026 at 08:34 AM
+-- Generation Time: May 13, 2026 at 06:17 AM
 -- Server version: 8.4.7
 -- PHP Version: 8.4.15
 
@@ -94,6 +94,48 @@ INSERT INTO `courses` (`id`, `title`, `description`, `status`, `created_at`, `up
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `course_details`
+--
+
+DROP TABLE IF EXISTS `course_details`;
+CREATE TABLE IF NOT EXISTS `course_details` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `course_id` int DEFAULT NULL,
+  `why_title_1` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `why_description_1` text COLLATE utf8mb4_unicode_ci,
+  `why_title_2` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `why_description_2` text COLLATE utf8mb4_unicode_ci,
+  `why_title_3` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `why_description_3` text COLLATE utf8mb4_unicode_ci,
+  `program_highlight` text COLLATE utf8mb4_unicode_ci,
+  `highlight_image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `module_title_1` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `module_description_1` text COLLATE utf8mb4_unicode_ci,
+  `module_title_2` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `module_description_2` text COLLATE utf8mb4_unicode_ci,
+  `module_title_3` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `module_description_3` text COLLATE utf8mb4_unicode_ci,
+  `created_at` date DEFAULT NULL,
+  `updated_at` date DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `course_details`
+--
+
+INSERT INTO `course_details` (`id`, `course_id`, `why_title_1`, `why_description_1`, `why_title_2`, `why_description_2`, `why_title_3`, `why_description_3`, `program_highlight`, `highlight_image`, `module_title_1`, `module_description_1`, `module_title_2`, `module_description_2`, `module_title_3`, `module_description_3`, `created_at`, `updated_at`) VALUES
+(1, NULL, 'Labore qui qui velit', 'Cupidatat repudianda', 'Earum rerum quia deb', 'Eum pariatur Sint e', 'Obcaecati exercitati', 'Tempore cupidatat b', 'Asperiores ut commod', '', 'Sit aliquip sit su', 'Sit magni autem impe', 'Officia incidunt ut', 'Odit tenetur quibusd', 'Quae tempor perspici', 'Consequatur iusto mi', '2026-05-12', '2026-05-12'),
+(2, NULL, 'Ratione qui animi a', 'Eu voluptate iusto i', 'Consectetur exceptur', 'Ut quis consectetur', 'Corrupti autem nequ', 'Laborum quo et eveni', 'Ipsam magni pariatur', '', 'Cum rerum architecto', 'Ea blanditiis ex ad', 'Porro quia sit mole', 'Aut dolor excepteur', 'Veniam dolor odit f', 'Odit neque dolor ips', '2026-05-12', '2026-05-12'),
+(3, NULL, 'Maxime excepteur cup', 'Sapiente voluptatem', 'Eiusmod deserunt com', 'Dolore aperiam qui r', 'Commodo et reprehend', 'Eveniet officia in', 'Et placeat ullam ut', '', 'Rem cumque repudiand', 'Labore minus aut aut', 'Voluptatem tempora e', 'Enim lorem sint volu', 'Vel possimus atque', 'Voluptate voluptatem', '2026-05-12', '2026-05-12'),
+(4, 4, 'Enim voluptas dolore', 'Possimus illum qua', 'Veniam obcaecati co', 'Tenetur do reprehend', 'Beatae numquam verit', 'Placeat reprehender', 'Ullam enim voluptate', '', 'Illum modi eos pos', 'Voluptatum sed rerum', 'Aperiam eaque est f', 'Enim dolor inventore', 'Autem eiusmod error', 'Excepturi dolore fac', '2026-05-12', '2026-05-12'),
+(5, 4, 'Enim ea aliquid sint', 'Ut in pariatur Sunt', 'Culpa unde ipsum vo', 'Cumque ipsum in vero', 'Duis unde at porro q', 'Hic qui doloribus si', 'Id aut id autem inci', '', 'Inventore aute volup', 'Aut sequi irure solu', 'In non aliqua Esse', 'Accusamus harum tene', 'Est minim est volupt', 'A commodo libero non', '2026-05-12', '2026-05-12'),
+(6, 4, 'Voluptatum mollit ve', 'Qui et et fugiat re', 'Iste provident simi', 'Ea fugit aut volupt', 'Itaque sunt voluptat', 'Ab officia quibusdam', 'Dolores voluptates e', '', 'Voluptates velit mag', 'Dolore nesciunt omn', 'Illum quam expedita', 'Enim reprehenderit e', 'Qui nisi consequat', 'Cum quis suscipit im', '2026-05-12', '2026-05-12'),
+(9, 4, 'Maiores et eiusmod n', 'Enim eos odit conse', 'Sequi minima tempor', 'Magnam quae consequa', 'Consequatur repelle', 'Officia ut facere of', 'Reiciendis odio enim', '1778593139_53607.jpg', 'Velit impedit eius', 'Voluptas voluptatibu', 'Blanditiis nisi ulla', 'Quis ex blanditiis d', 'Labore aliquid conse', 'Velit itaque sed ve', '2026-05-12', '2026-05-12');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `extra_curricular_activities`
 --
 
@@ -136,7 +178,7 @@ CREATE TABLE IF NOT EXISTS `galleries` (
 --
 
 INSERT INTO `galleries` (`id`, `title`, `description`, `created_at`, `updated_at`) VALUES
-(1, 'Trip', 'Images of trip', '2026-05-07', '2026-05-07');
+(1, 'Trip', 'Images of trip', '2026-05-07', '2026-05-12');
 
 -- --------------------------------------------------------
 
@@ -150,15 +192,40 @@ CREATE TABLE IF NOT EXISTS `gallery_images` (
   `gallery_id` int NOT NULL,
   `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `gallery_images`
 --
 
 INSERT INTO `gallery_images` (`id`, `gallery_id`, `image`) VALUES
-(1, 1, '1778149990_53607.jpg'),
-(2, 1, '1778149990_adidas.jpg');
+(4, 1, '1778591461_53607.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `monthly_toppers`
+--
+
+DROP TABLE IF EXISTS `monthly_toppers`;
+CREATE TABLE IF NOT EXISTS `monthly_toppers` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `student_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `course_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `created_at` date DEFAULT NULL,
+  `updated_at` date DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `topper_date` date DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `monthly_toppers`
+--
+
+INSERT INTO `monthly_toppers` (`id`, `student_name`, `course_name`, `description`, `created_at`, `updated_at`, `image`, `topper_date`) VALUES
+(3, 'Rahul Verma', 'JEE', '', '2026-05-12', '2026-05-12', '1778572876_53607.jpg', '2023-06-22');
 
 -- --------------------------------------------------------
 
@@ -174,14 +241,15 @@ CREATE TABLE IF NOT EXISTS `results` (
   `created_at` date DEFAULT NULL,
   `updated_at` date DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `results`
 --
 
 INSERT INTO `results` (`id`, `course_id`, `year`, `created_at`, `updated_at`) VALUES
-(4, 3, '2022', '2026-05-07', '2026-05-07');
+(4, 3, '2022', '2026-05-07', '2026-05-07'),
+(5, 4, '2023', '2026-05-12', '2026-05-12');
 
 -- --------------------------------------------------------
 
@@ -195,7 +263,14 @@ CREATE TABLE IF NOT EXISTS `result_images` (
   `result_id` int NOT NULL,
   `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `result_images`
+--
+
+INSERT INTO `result_images` (`id`, `result_id`, `image`) VALUES
+(4, 5, '1778594595_53607.jpg');
 
 -- --------------------------------------------------------
 
@@ -212,14 +287,15 @@ CREATE TABLE IF NOT EXISTS `social_links` (
   `created_at` date DEFAULT NULL,
   `updated_at` date DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `social_links`
 --
 
 INSERT INTO `social_links` (`id`, `title`, `link`, `description`, `created_at`, `updated_at`) VALUES
-(1, 'Demo Tutorial', 'https://music.youtube.com/', 'Demo Tutorial', '2026-05-07', '2026-05-07');
+(1, 'Demo Tutorial', 'https://music.youtube.com/', 'Demo Tutorial', '2026-05-07', '2026-05-07'),
+(2, 'Quia ut dignissimos', 'https://www.vulas.tv', 'Quia sunt ullam et c', '2026-05-12', '2026-05-12');
 
 -- --------------------------------------------------------
 
@@ -233,7 +309,14 @@ CREATE TABLE IF NOT EXISTS `social_link_images` (
   `social_link_id` int NOT NULL,
   `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `social_link_images`
+--
+
+INSERT INTO `social_link_images` (`id`, `social_link_id`, `image`) VALUES
+(1, 2, '1778594746_53607.jpg');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

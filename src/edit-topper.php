@@ -2,7 +2,7 @@
 
 session_start();
 
-if(!isset($_SESSION['admin'])){
+if (!isset($_SESSION['admin'])) {
 
     header('location:login');
 
@@ -19,7 +19,7 @@ $id = $_GET['id'];
 |--------------------------------------------------------------------------
 */
 
-if(isset($_POST['update_topper'])){
+if (isset($_POST['update_topper'])) {
 
     $student_name = trim($_POST['student_name']);
 
@@ -55,22 +55,22 @@ if(isset($_POST['update_topper'])){
     |--------------------------------------------------------------------------
     */
 
-    if($_FILES['image']['error'] == 0){
+    if ($_FILES['image']['error'] == 0) {
 
-        if(
+        if (
             $image &&
-            file_exists('uploads/monthly-toppers/'.$image)
-        ){
+            file_exists('uploads/monthly-toppers/' . $image)
+        ) {
 
-            unlink('uploads/monthly-toppers/'.$image);
+            unlink('uploads/monthly-toppers/' . $image);
         }
 
         $image =
-        time().'_'.$_FILES['image']['name'];
+            time() . '_' . $_FILES['image']['name'];
 
         move_uploaded_file(
             $_FILES['image']['tmp_name'],
-            'uploads/monthly-toppers/'.$image
+            'uploads/monthly-toppers/' . $image
         );
     }
 
@@ -272,11 +272,32 @@ $topper = $stmt->fetch(PDO::FETCH_ASSOC);
 
                                     </label>
 
-                                    <?php if($topper['image']){ ?>
+                                    <?php if ($topper['image']) { ?>
 
-                                        <img
-                                            src="uploads/monthly-toppers/<?php echo $topper['image']; ?>"
-                                            class="h-40 rounded-xl border border-slate-200 object-cover dark:border-slate-700" />
+                                        <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+
+                                            <div class="space-y-2">
+
+                                                <div class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700">
+
+                                                    <img
+                                                        src="uploads/monthly-toppers/<?php echo $topper['image']; ?>"
+                                                        class="h-40 w-full object-cover" />
+
+                                                </div>
+
+                                                <a
+                                                    href="delete-image.php?id=<?php echo $topper['id']; ?>&table=monthly_toppers&folder=uploads/monthly-toppers&redirect=edit-topper.php&foreign_key=id"
+                                                    onclick="return confirm('Delete this image?')"
+                                                    class="flex w-full mt-1 items-center justify-center rounded-xl bg-red-500 px-2 py-1 text-sm font-medium text-white transition hover:bg-red-600">
+
+                                                    Delete Image
+
+                                                </a>
+
+                                            </div>
+
+                                        </div>
 
                                     <?php } ?>
 

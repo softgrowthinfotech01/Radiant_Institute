@@ -95,12 +95,12 @@ if (isset($_POST['update_details'])) {
         if (
             $highlight_image &&
             file_exists(
-                '../uploads/course-details/' . $highlight_image
+                'uploads/course-details/' . $highlight_image
             )
         ) {
 
             unlink(
-                '../uploads/course-details/' . $highlight_image
+                'uploads/course-details/' . $highlight_image
             );
         }
 
@@ -370,17 +370,31 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                     <?php if (!empty($detail['highlight_image'])) { ?>
 
-                                        <div>
+                                        <div class="space-y-2">
 
-                                            <p class="mb-2 text-sm font-medium text-slate-600 dark:text-slate-300">
+                                            <div class=" mb-2 w-40">
 
-                                                Current Image
+                                                <p class="mb-2 text-sm font-medium text-slate-600 dark:text-slate-300">
 
-                                            </p>
+                                                    Current Image
 
-                                            <img
-                                                src="../uploads/course-details/<?php echo $detail['highlight_image']; ?>"
-                                                class="h-40 w-full rounded-xl border border-slate-200 object-cover dark:border-slate-700" />
+                                                </p>
+
+                                                <img
+    src="uploads/course-details/<?php echo $detail['highlight_image']; ?>"
+    style="width:120px; height:120px;"
+    class="object-cover rounded-lg border border-slate-200 dark:border-slate-700" />
+
+                                            </div>
+
+                                            <a
+                                                href="delete-image.php?id=<?php echo $detail['id']; ?>&table=course_details&folder=uploads/course-details&redirect=edit-details.php&foreign_key=id"
+                                                onclick="return confirm('Delete this image?')"
+                                                class="inline-flex mt-1 items-center justify-center rounded-xl bg-red-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-600">
+
+                                                Delete Image
+
+                                            </a>
 
                                         </div>
 
@@ -389,7 +403,7 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <input
                                         type="file"
                                         name="highlight_image"
-                                        class="block w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-950" />
+                                        class="block w-full mt-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-950" />
 
                                 </div>
 

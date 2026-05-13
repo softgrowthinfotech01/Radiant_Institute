@@ -180,7 +180,6 @@ if (isset($_POST['add_course'])) {
                   <input
                     type="file"
                     name="images[]"
-                    required
                     class="block w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-950" />
 
                 </div>
@@ -204,20 +203,19 @@ if (isset($_POST['add_course'])) {
 
   <script src="../dist/js/app.js"></script>
 
-    <script>
+  <script>
+    function addImageField() {
 
-    function addImageField(){
-
-        const container =
+      const container =
         document.getElementById('image-fields');
 
-        const wrapper =
+      const wrapper =
         document.createElement('div');
 
-        wrapper.className =
+      wrapper.className =
         'flex items-center gap-3';
 
-        wrapper.innerHTML = `
+      wrapper.innerHTML = `
         
             <input
                 type="file"
@@ -234,15 +232,14 @@ if (isset($_POST['add_course'])) {
             </button>
         `;
 
-        container.appendChild(wrapper);
+      container.appendChild(wrapper);
     }
 
-    function removeImageField(button){
+    function removeImageField(button) {
 
-        button.parentElement.remove();
+      button.parentElement.remove();
     }
-
-    </script>
+  </script>
 
 </body>
 

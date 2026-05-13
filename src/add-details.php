@@ -241,6 +241,30 @@ if (isset($_POST['save_details'])) {
 
                     </div>
 
+                    <!-- Select Dropdown Logic -->
+                    <?php
+                    $stmt = $conn->prepare("
+    SELECT course_id
+    FROM course_details
+");
+
+                    $stmt->execute();
+
+                    $usedCourses =
+                        $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+                    $stmt = $conn->prepare("
+    SELECT *
+    FROM courses
+    ORDER BY title ASC
+");
+
+                    $stmt->execute();
+
+                    $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    ?>
+                    <!-- Select Dropdown Logic -->
+
                     <form method="POST"
                         enctype="multipart/form-data">
 
@@ -263,17 +287,52 @@ if (isset($_POST['save_details'])) {
                                 <select
                                     name="course_id"
                                     required
-                                    class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-950">
+                                    class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-950">
 
                                     <option value="">
                                         Select Course
                                     </option>
 
-                                    <?php foreach($courses as $course){ ?>
+                                    <?php foreach ($courses as $course) { ?>
 
-                                        <option value="<?php echo $course['id']; ?>">
+                                        <?php
+
+                                        $isUsed =
+                                            in_array(
+                                                $course['id'],
+                                                $usedCourses
+                                            );
+
+                                        ?>
+
+                                        <option
+                                            value="<?php echo $course['id']; ?>"
+                                            <?php echo $isUsed ? 'disabled' : ''; ?>
+
+                                            style="
+                <?php
+
+                                        if ($isUsed) {
+
+                                            echo '
+                    color:#94a3b8;
+                    background:#f1f5f9;
+                    ';
+                                        }
+
+                ?>
+            ">
 
                                             <?php echo $course['title']; ?>
+
+                                            <?php
+
+                                            if ($isUsed) {
+
+                                                echo ' (Already Added)';
+                                            }
+
+                                            ?>
 
                                         </option>
 

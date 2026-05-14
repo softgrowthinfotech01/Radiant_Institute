@@ -73,8 +73,28 @@ $courses = $select->fetchAll(PDO::FETCH_ASSOC);
                         <?php
                         for ($i = 0; $i < count($courses); $i++) {
                         ?>
-                            <a href="jee.php" class="block px-4 py-2 hover:bg-blue-50"><?= $courses[$i]['title']; ?></a>
+                            <a href="jee?id=<?php echo $courses[$i]['id']; ?>" class="block px-4 py-2 hover:bg-blue-50"><?= $courses[$i]['title']; ?></a>
                         <?php } ?>
+                    </div>
+                </div>
+
+            <nav class="hidden md:flex gap-8 text-black items-center">
+
+                <!-- COURSE -->
+                <div class="relative">
+                    <button onclick="toggleDropdown('results')"
+                        class="flex items-center gap-1 font-semibold">
+                        Results
+                        <span id="arrow-results" class="transition-transform duration-300 mb-2">⌄</span>
+                    </button>
+
+                    <div id="dropdown-results"
+                        class="absolute left-0 mt-2 w-52 bg-white shadow-lg rounded-lg
+      opacity-0 scale-95 invisible transform
+      transition-all duration-300 ease-out origin-top">
+                       
+                            <a href="" class="block px-4 py-2 hover:bg-blue-50">Results</a>
+                            <a href="" class="block px-4 py-2 hover:bg-blue-50">Monthly Topper</a>
                     </div>
                 </div>
 
@@ -134,16 +154,16 @@ $courses = $select->fetchAll(PDO::FETCH_ASSOC);
 
                     <div id="m-dropdown-m-course"
                         class="max-h-0 overflow-hidden transition-all duration-300 flex flex-col ml-3 mt-2 text-sm">
-                        <a href="jee.php" class="py-1">JEE</a>
-                        <a href="neet.php" class="py-1">NEET</a>
-                        <a href="mht-cet.php" class="py-1">MHT-CET</a>
-                        <a href="11-12th.php" class="py-1">11 + 12th</a>
-                        <a href="crashcourse.php" class="py-1">Crash Course</a>
+                         <?php
+                        for ($i = 0; $i < count($courses); $i++) {
+                        ?>
+                        <a href="jee?id=<?php echo $courses[$i]['id']; ?>" class="py-1"><?php echo $courses[$i]['title']; ?></a>
+                        <?php } ?>
                     </div>
                 </div>
 
                 <!-- RESULTS -->
-                <div>
+                <!-- <div>
                     <button onclick="toggleMobileDropdown('m-results')"
                         class="w-full flex justify-between items-center font-semibold">
                         Results
@@ -157,16 +177,17 @@ $courses = $select->fetchAll(PDO::FETCH_ASSOC);
                         <a href="mht-cetresult.php" class="py-1">MHT-CET</a>
                         <a href="boardresult.php" class="py-1">Board</a>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- ENQUIRY -->
-                <a class="font-semibold" href="enquiry.php">Enquiry</a>
+                <a class="font-semibold" href="jeeresult">Results</a>
+                <a class="font-semibold" href="enquiry">Enquiry</a>
 
                 <!-- NORMAL LINKS -->
                 <a href="about_us.php" class="font-semibold">About Us</a>
-                <a href="extra_curricular_activities.php" class="font-semibold">Extra Curricular</a>
-                <a href="gallary.php" class="font-semibold">Gallery</a>
-                <a href="contact_us.php" class="font-semibold">Contact Us</a>
+                <a href="extra_curricular_activities" class="font-semibold">Extra Curricular</a>
+                <a href="gallary" class="font-semibold">Gallery</a>
+                <a href="contact_us" class="font-semibold">Contact Us</a>
 
             </div>
 

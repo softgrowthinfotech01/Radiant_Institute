@@ -222,7 +222,7 @@ foreach ($extras as &$row) {
 
 <div class="text-center mb-14">
     <h2 class="text-3xl md:text-5xl font-bold text-[#E41C2A]">
-        <?= htmlspecialchars($extra['title']); ?>
+        <?= htmlspecialchars($extra['title']); ?> : <?= htmlspecialchars($extra['year']); ?>
     </h2>
 
     <p class="text-gray-600 mt-3">

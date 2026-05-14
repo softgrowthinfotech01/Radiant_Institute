@@ -138,11 +138,16 @@
   <div class="input-group">
     <select id="course" required>
       <option value=""></option>
-      <option class="text-black">JEE</option>
-      <option class="text-black">NEET</option>
-      <option class="text-black">MHT-CET</option>
-      <option class="text-black">11th & 12th</option>
-      <option class="text-black">Crash Course</option>
+<?php 
+$stmt = $conn->prepare("SELECT * FROM courses WHERE status = 1");
+$stmt->execute();
+
+$ret = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+for($i=0; $i<count($ret);$i++){
+?>
+      <option class="text-black" value="<?= $ret[$i]['title']; ?>"><?= $ret[$i]['title']; ?></option>
+      <?php } ?>
     </select>
     <label>Select Course</label>
   </div>

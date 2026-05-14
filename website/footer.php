@@ -64,43 +64,37 @@
         <ul class="space-y-3 text-gray-300">
 
           <li>
-            <a href="index.php" class="hover:text-yellow-400 duration-300 flex items-center gap-2">
+            <a href="home" class="hover:text-yellow-400 duration-300 flex items-center gap-2">
               ➜ Home
             </a>
           </li>
 
           <li>
-            <a href="about_us.php" class="hover:text-yellow-400 duration-300 flex items-center gap-2">
+            <a href="about_us" class="hover:text-yellow-400 duration-300 flex items-center gap-2">
               ➜ About Us
             </a>
           </li>
 
           <li>
-            <a href="courses.php" class="hover:text-yellow-400 duration-300 flex items-center gap-2">
-              ➜ Courses
-            </a>
-          </li>
-
-          <li>
-            <a href="gallary.php" class="hover:text-yellow-400 duration-300 flex items-center gap-2">
+            <a href="gallary" class="hover:text-yellow-400 duration-300 flex items-center gap-2">
               ➜ Gallery
             </a>
           </li>
 
           <li>
-            <a href="contact_us.php" class="hover:text-yellow-400 duration-300 flex items-center gap-2">
+            <a href="contact_us" class="hover:text-yellow-400 duration-300 flex items-center gap-2">
               ➜ Contact Us
             </a>
           </li>
 
           <li>
-            <a href="privacy_policy.php" class="hover:text-yellow-400 duration-300 flex items-center gap-2">
+            <a href="privacy_policy" class="hover:text-yellow-400 duration-300 flex items-center gap-2">
               ➜ Privacy Policy
             </a>
           </li>
 
           <li>
-            <a href="terms_conditions.php" class="hover:text-yellow-400 duration-300 flex items-center gap-2">
+            <a href="terms_conditions" class="hover:text-yellow-400 duration-300 flex items-center gap-2">
               ➜ Terms & Conditions
             </a>
           </li>
@@ -117,41 +111,19 @@
 
   <ul class="space-y-4 text-gray-300">
 
+  <?php 
+  $footer = $conn->prepare("SELECT * FROM courses WHERE status = 1");
+  $footer->execute();
+  $ret = $footer->fetchAll(PDO::FETCH_ASSOC);
+  for($i=0;$i<count($ret);$i++){
+  ?>
     <li>
-      <a href="jee.php"
+      <a href="jee?id=<?= $ret[$i]['id']; ?>"
         class="hover:text-yellow-400 duration-300 cursor-pointer flex items-center gap-2">
-        ➜ IIT - JEE Preparation
+        ➜ <?=  $ret[$i]['title'] ?>
       </a>
     </li>
-
-    <li>
-      <a href="neet.php"
-        class="hover:text-yellow-400 duration-300 cursor-pointer flex items-center gap-2">
-        ➜ NEET Preparation
-      </a>
-    </li>
-
-    <li>
-      <a href="mht-cet.php"
-        class="hover:text-yellow-400 duration-300 cursor-pointer flex items-center gap-2">
-        ➜ MHT-CET Courses
-      </a>
-    </li>
-
-    <li>
-      <a href="11-12th.php"
-        class="hover:text-yellow-400 duration-300 cursor-pointer flex items-center gap-2">
-        ➜ 11th & 12th Boards
-      </a>
-    </li>
-
-    <li>
-      <a href="crashcourse.php"
-        class="hover:text-yellow-400 duration-300 cursor-pointer flex items-center gap-2">
-        ➜ Crash Courses
-      </a>
-    </li>
-
+<?php } ?>
   </ul>
 </div>
 
@@ -227,7 +199,7 @@
       <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-300">
 
         <p>
-          © 2026 Radiant Coaching Institute. All Rights Reserved.
+          © 2026 <a target="_blank" href="https://softgrowthinfotech.com/">Softgrowth Infotech</a>. All Rights Reserved.
         </p>
 
         <!-- <p>

@@ -173,6 +173,7 @@ Have questions? Want to join Radiant? Contact us today and we’ll guide you.
         id="phone"
         placeholder="Phone Number"
         maxlength="10"
+        minlength="10"
         required
         class="input w-full p-3 rounded-lg text-black border-black"
       >
@@ -270,10 +271,10 @@ document.getElementById("contactForm").addEventListener("submit", function(e){
     // PHONE
     let phonePattern = /^[6-9]\d{9}$/;
 
-    if(!phonePattern.test(phone)){
-        alert("Please enter valid 10 digit mobile number");
-        return;
-    }
+    // if(!phonePattern.test(phone)){
+    //     alert("Please enter valid 10 digit mobile number");
+    //     return;
+    // }
 
     // COURSE
     if(course === ""){

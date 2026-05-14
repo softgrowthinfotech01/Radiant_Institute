@@ -60,7 +60,7 @@ foreach ($extras as &$course) {
 
 // gallery
 
-$gallery = $conn->prepare("SELECT image FROM gallery_images");
+$gallery = $conn->prepare("SELECT image FROM gallery_images LIMIT 4");
 $gallery->execute();
 
 $galleries = $gallery->fetchAll(PDO::FETCH_ASSOC);
@@ -105,6 +105,48 @@ foreach ($stmts as &$course) {
 // print_r($stmts);
 // exit;
 
+
+$result = $conn->prepare("
+SELECT 
+    results.id,
+    results.year,
+    courses.title,
+    courses.description,
+
+    COALESCE(
+        JSON_ARRAYAGG(result_images.image),
+        JSON_ARRAY()
+    ) AS images
+
+FROM results
+
+LEFT JOIN courses 
+    ON courses.id = results.course_id
+
+LEFT JOIN result_images 
+    ON results.id = result_images.result_id
+    AND result_images.image IS NOT NULL
+    AND result_images.image != ''
+
+GROUP BY results.id
+ORDER BY results.year DESC LIMIT 2
+");
+
+$result->execute();
+
+$results = $result->fetchAll(PDO::FETCH_ASSOC);
+
+
+/* Convert JSON images → PHP array */
+foreach ($results as &$row) {
+  $row['images'] = array_filter(
+    json_decode($row['images'], true) ?? []
+  );
+}
+
+// echo "<pre>";
+// print_r($results);
+// exit;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -738,13 +780,11 @@ our result animation end */
             class="w-full p-3 rounded-lg bg-transparent border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400">
 
             <option value="" class="text-black">Select Course</option>
-
-            <option class="text-black">JEE</option>
-            <option class="text-black">NEET</option>
-            <option class="text-black">MHT-CET</option>
-            <option class="text-black">11th & 12th</option>
-            <option class="text-black">Crash Course</option>
-
+            <?php
+            for ($i = 0; $i < count($coursess); $i++) {
+            ?>
+              <option class="text-black" value="<?= $coursess[$i]['title']; ?>"><?= $coursess[$i]['title']; ?></option>
+            <?php } ?>
           </select>
 
           <!-- Enquiry Type -->
@@ -891,13 +931,13 @@ bg-cover bg-center bg-no-repeat">
           </div>
         </div>
       <?php } ?>
-       <!-- CTA -->
-            <div class="mt-10 text-center">
-              <a href="enquiry.php"
-                class="ctaBtn inline-block px-8 py-3 bg-green-500 text-black font-bold rounded-full shadow-lg hover:scale-105 transition duration-300">
-                Enroll Now
-              </a>
-            </div>
+      <!-- CTA -->
+      <div class="mt-10 text-center">
+        <a href="enquiry.php"
+          class="ctaBtn inline-block px-8 py-3 bg-green-500 text-black font-bold rounded-full shadow-lg hover:scale-105 transition duration-300">
+          Enroll Now
+        </a>
+      </div>
     </section>
   <?php endif; ?>
   <!-- result -->
@@ -909,47 +949,56 @@ bg-cover bg-center bg-no-repeat">
     </div>
 
     <!-- Grid -->
-    <div id="resultsContainer" class="result-wrap grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+    <div id="resultsContainer" class="result-wrap grid gap-8 md:grid-cols-2 lg:grid-cols-2">
 
-      <!-- Card 1 -->
-      <div class="result-card bg-white text-gray-800 rounded-2xl p-6 text-center shadow-lg hover:scale-105">
-        <div class="inner">
-          <img src="https://randomuser.me/api/portraits/men/32.jpg" class="result-img w-24 h-24 mx-auto rounded-full border-4 border-yellow-400 mb-4">
-          <h3 class="text-xl font-bold">Rahul Sharma</h3>
-          <p class="bg-[#E41C2A] rounded-lg text-white font-semibold">JEE - 98.7 Percentile</p>
-          <p class="text-gray-800 mt-2 text-sm">AIR 1456 • Selected in NIT</p>
-        </div>
-      </div>
+      <?php foreach ($results as $extra):
 
-      <!-- Card 2 -->
-      <div class="result-card bg-white text-gray-800 rounded-2xl p-6 text-center shadow-lg hover:scale-105">
-        <div class="inner">
-          <img src="https://randomuser.me/api/portraits/women/44.jpg" class="result-img w-24 h-24 mx-auto rounded-full border-4 border-yellow-400 mb-4">
-          <h3 class="text-xl font-bold">Priya Patil</h3>
-          <p class="bg-[#E41C2A]  rounded-lg text-white font-semibold">NEET - 620 Marks</p>
-          <p class="text-gray-800 mt-2 text-sm">Selected in Govt Medical College</p>
-        </div>
-      </div>
+        // remove empty images
+        $images = array_filter($extra['images'] ?? []);
 
-      <!-- Card 3 -->
-      <div class="result-card bg-white text-gray-800 rounded-2xl p-6 text-center shadow-lg hover:scale-105">
-        <div class="inner">
-          <img src="https://randomuser.me/api/portraits/men/12.jpg" class="result-img w-24 h-24 mx-auto rounded-full border-4 border-yellow-400 mb-4">
-          <h3 class="text-xl font-bold">Amit Deshmukh</h3>
-          <p class="bg-[#E41C2A] rounded-lg text-white font-semibold">MHT-CET - 99.2%</p>
-          <p class="text-gray-800 mt-2 text-sm">Top Engineering College</p>
-        </div>
-      </div>
+        // skip section if no images
+        if (empty($images)) continue;
+      ?>
 
-      <!-- Card 4 -->
-      <div class="result-card bg-white text-gray-800 rounded-2xl p-6 text-center shadow-lg hover:scale-105">
-        <div class="inner">
-          <img src="https://randomuser.me/api/portraits/women/22.jpg" class="result-img w-24 h-24 mx-auto rounded-full border-4 border-yellow-400 mb-4">
-          <h3 class="text-xl font-bold">Sneha Kulkarni</h3>
-          <p class="bg-[#E41C2A] rounded-lg text-white font-semibold">Board - 92%</p>
-          <p class="text-gray-800 mt-2 text-sm ">Topper in Science Stream</p>
+        <div class="text-center mb-14">
+          <h2 class="text-3xl md:text-5xl font-bold text-[#E41C2A]">
+            <?= htmlspecialchars($extra['title']); ?>
+          </h2>
+
+          <p class="text-gray-600 mt-3">
+            <?= htmlspecialchars($extra['description']); ?>
+          </p>
         </div>
-      </div>
+
+        <div class="grid md:grid-cols-1 lg:grid-cols-1 gap-10">
+
+          <?php
+          $firstImage = reset($images); // get first image
+          if ($firstImage):
+          ?>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+
+              <div class="gallery-card group" data-aos="zoom-in">
+                <div class="relative overflow-hidden rounded-2xl shadow-2xl cursor-pointer">
+
+                  <img
+                    src="../src/uploads/results/<?= htmlspecialchars($firstImage) ?>"
+                    class="media w-full h-64 object-cover brightness-75"
+                    loading="lazy"
+                    onerror="this.closest('.gallery-card').remove();">
+
+                </div>
+              </div>
+
+            </div>
+
+          <?php endif; ?>
+
+        </div>
+
+      <?php endforeach; ?>
+
     </div>
 
     <!-- Add More Button (for admin use) -->
@@ -1026,7 +1075,7 @@ bg-cover bg-center bg-no-repeat">
     <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
 
       <?php
-      for ($i = 0; $i < count($extras); $i++) {
+      for ($i = 0; $i < 2; $i++) {
       ?>
         <!-- CARD -->
         <div class="card group" onmousemove="tilt(event,this)" onmouseleave="resetTilt(this)">
@@ -1578,10 +1627,10 @@ Message: ${message}`;
       // PHONE VALIDATION
       let phonePattern = /^[6-9]\d{9}$/;
 
-      if (!phonePattern.test(phone)) {
-        alert("Please enter valid 10 digit mobile number");
-        return;
-      }
+      // if (!phonePattern.test(phone)) {
+      //   alert("Please enter valid 10 digit mobile number");
+      //   return;
+      // }
 
       // COURSE VALIDATION
       if (course === "") {

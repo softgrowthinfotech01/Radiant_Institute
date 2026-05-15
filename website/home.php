@@ -1191,7 +1191,7 @@ bg-cover bg-center bg-no-repeat">
   <section class="bg-white py-16 px-6 md:px-16 bg-cover bg-center bg-no-repeatr" style="background-image: url('images/redbg3.png');">
     <!-- Heading -->
     <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-5xl font-bold text-white p-2 rounded-lg text-[#E41C2A]">
+      <h2 class="text-3xl md:text-5xl font-bold p-2 rounded-lg text-[#E41C2A]">
         Why Choose Us
       </h2>
       <p class="text-gray-400 mt-3">

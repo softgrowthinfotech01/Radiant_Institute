@@ -98,6 +98,11 @@ $stmt->execute($params);
 
 $toppers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+
+$ret = $conn->prepare("SELECT * FROM courses WHERE status = 1");
+$ret->execute();
+
+$course = $ret->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -299,8 +304,13 @@ $toppers = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 </td>
 
                                                 <td class="px-4 py-3 lg:px-6">
+<?php 
+for($i=0; $i<count($course);$i++){ 
+echo ($topper['course_name'] == $course[$i]['id']) ? $course[$i]['title'] : "" ;
 
-                                                    <?php echo $topper['course_name']; ?>
+}
+
+    ?>
 
                                                 </td>
 

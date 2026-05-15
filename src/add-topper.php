@@ -2,7 +2,7 @@
 
 session_start();
 
-if(!isset($_SESSION['admin'])){
+if (!isset($_SESSION['admin'])) {
 
     header('location:login');
 
@@ -11,7 +11,7 @@ if(!isset($_SESSION['admin'])){
 
 include('../conn.php');
 
-if(isset($_POST['save_topper'])){
+if (isset($_POST['save_topper'])) {
 
     $student_name = trim($_POST['student_name']);
 
@@ -29,14 +29,14 @@ if(isset($_POST['save_topper'])){
     |--------------------------------------------------------------------------
     */
 
-    if($_FILES['image']['error'] == 0){
+    if ($_FILES['image']['error'] == 0) {
 
         $image =
-        time().'_'.$_FILES['image']['name'];
+            time() . '_' . $_FILES['image']['name'];
 
         move_uploaded_file(
             $_FILES['image']['tmp_name'],
-            'uploads/monthly-toppers/'.$image
+            'uploads/monthly-toppers/' . $image
         );
     }
 
@@ -79,6 +79,11 @@ if(isset($_POST['save_topper'])){
 
     exit;
 }
+
+$course = $conn->prepare("SELECT * FROM courses WHERE status = 1");
+$course->execute();
+
+$res = $course->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -173,14 +178,20 @@ if(isset($_POST['save_topper'])){
 
                                     </label>
 
-                                    <input
-                                        type="text"
+                                    <select
                                         name="course_name"
-                                        required
-                                        placeholder="Enter Course Name"
-                                        class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none ring-brand-500/30 placeholder:text-slate-400 focus:border-brand-300 focus:bg-white focus:ring-4 dark:border-slate-700 dark:bg-slate-950 dark:focus:bg-slate-950" />
+                                        class="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none ring-brand-500/25 focus:border-brand-400 focus:ring-4 dark:border-slate-700 dark:bg-slate-950">
+                                        <option value="">-SELECT COURSE-</option>
 
+                                        <?php
+                                        for ($i = 0; $i < count($res); $i++) {
+                                        ?>
+                                            <option value="<?= $res[$i]['id']; ?>"><?= $res[$i]['title']; ?></option>
+                                        <?php } ?>
+                                    </select>
                                 </div>
+
+
 
                                 <!-- TOPPER DATE -->
 

@@ -863,7 +863,7 @@ bg-cover bg-center bg-no-repeat">
               <?= $coursess[$i]['title']; ?>
             </h3>
 
-            <p class="text-gray-700 text-sm leading-relaxed">
+            <p class="text-gray-700 text-sm leading-relaxed truncate">
               <?= $coursess[$i]['description']; ?>
             </p>
 

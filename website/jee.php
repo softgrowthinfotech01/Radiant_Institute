@@ -8,7 +8,14 @@ $stmt->execute();
 
 $res  = $stmt->fetch(PDO::FETCH_ASSOC);
 
+$data = $res['course_id'];
+
+$ret = $conn->prepare("SELECT * FROM courses where id = $data and status = 1");
+$ret->execute();
+
+$sel = $ret->fetch(PDO::FETCH_ASSOC);
 // echo "<pre>";
+// print_r($sel);
 // print_r($res);
 // exit();
 
@@ -132,6 +139,31 @@ if($res == null){
 
    </section>
 
+   <!-- ================= OVERVIEW ================= -->
+   <section class="relative py-20 px-6 md:px-16 bg-[#DCE0EC] glow">
+
+      <div class="max-w-6xl mx-auto text-center mb-14" data-aos="fade-up">
+         <h2 class="text-3xl md:text-5xl font-bold text-[#E41C2A]">
+           About OUR Program
+         </h2>
+         <p class="text-gray-600 mt-4">
+            Designed for serious aspirants aiming for IITs & top engineering colleges.
+         </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+
+         <?php
+         if ($sel) {
+         ?>
+            <div class="card bg-white p-6 rounded-2xl shadow-lg place-items-center" data-aos="fade-up">
+              <?= $sel['description']; ?>
+            </div>
+         <?php } ?>
+        
+      </div>
+
+   </section>
    <!-- ================= OVERVIEW ================= -->
    <section class="relative py-20 px-6 md:px-16 bg-[#DCE0EC] glow">
 

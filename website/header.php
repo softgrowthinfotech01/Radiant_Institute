@@ -48,9 +48,11 @@ $courses = $select->fetchAll(PDO::FETCH_ASSOC);
             <!-- LOGO -->
             <a href="home.php">
                 <div class="logo flex items-center -gap-4">
-                    <img src="images/r-logo.png" alt=""
-                        class="h-12 sm:h-24 md:h-[90px] md:w-[240px] w-auto object-contain">
-
+                    <!-- <img src="images/r-logo.png" alt=""
+                        class="h-12 sm:h-24 md:h-[90px] md:w-[240px] w-auto object-contain"> -->
+<div class="text-7xl font-extrabold text-red-600">
+    Radiant
+</div>
 
                 </div>
             </a>
@@ -93,13 +95,10 @@ $courses = $select->fetchAll(PDO::FETCH_ASSOC);
       opacity-0 scale-95 invisible transform
       transition-all duration-300 ease-out origin-top">
                        
-                            <a href="" class="block px-4 py-2 hover:bg-blue-50">Results</a>
-                            <a href="" class="block px-4 py-2 hover:bg-blue-50">Monthly Topper</a>
+                            <a href="jeeresult" class="block px-4 py-2 hover:bg-blue-50">Results</a>
+                            <a href="mon_topper" class="block px-4 py-2 hover:bg-blue-50">Monthly Topper</a>
                     </div>
                 </div>
-
-                <!-- results -->
-                <a class="font-semibold" href="jeeresult.php">Results</a>
 
                 <!-- ABOUT -->
                 <a class="font-semibold" href="about_us.php">About Us</a>

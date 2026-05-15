@@ -124,6 +124,12 @@ $stmt->execute([
 
 $topper = $stmt->fetch(PDO::FETCH_ASSOC);
 
+
+$course = $conn->prepare("SELECT * FROM courses WHERE status = 1");
+$course->execute();
+
+$res = $course->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -217,13 +223,28 @@ $topper = $stmt->fetch(PDO::FETCH_ASSOC);
 
                                     </label>
 
-                                    <input
+                                    <!-- <input
                                         type="text"
                                         name="course_name"
                                         required
                                         value="<?php echo $topper['course_name']; ?>"
                                         class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none ring-brand-500/30 focus:border-brand-300 focus:bg-white focus:ring-4 dark:border-slate-700 dark:bg-slate-950 dark:focus:bg-slate-950" />
+                                     -->
+                                    <select
+                                        name="course_name"
+                                        class="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none ring-brand-500/25 focus:border-brand-400 focus:ring-4 dark:border-slate-700 dark:bg-slate-950">
 
+                                        <option value="">-SELECT COURSE-</option>
+
+                                        <?php for ($i = 0; $i < count($res); $i++) { ?>
+                                            <option
+                                                value="<?= $res[$i]['id']; ?>"
+                                                <?= ($topper['course_name'] == $res[$i]['id']) ? 'selected' : ''; ?>>
+                                                <?= $res[$i]['title']; ?>
+                                            </option>
+                                        <?php } ?>
+
+                                    </select>
                                 </div>
 
                                 <!-- TOPPER DATE -->

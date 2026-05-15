@@ -46,7 +46,7 @@ $courses = $select->fetchAll(PDO::FETCH_ASSOC);
         <div class="flex items-center justify-between md:justify-around px-4 sm:px-6 md:px-10 py-2">
 
             <!-- LOGO -->
-            <a href="home.php">
+            <a href="home">
                 <div class="logo flex items-center -gap-4">
                     <!-- <img src="images/r-logo.png" alt=""
                         class="h-12 sm:h-24 md:h-[90px] md:w-[240px] w-auto object-contain"> -->
@@ -101,14 +101,14 @@ $courses = $select->fetchAll(PDO::FETCH_ASSOC);
                 </div>
 
                 <!-- ABOUT -->
-                <a class="font-semibold" href="about_us.php">About Us</a>
+                <a class="font-semibold" href="about_us">About Us</a>
 
                 <!-- ENQUIRY -->
-                <a class="font-semibold" href="enquiry.php">Enquiry</a>
+                <a class="font-semibold" href="enquiry">Enquiry</a>
 
-                <a class="font-semibold" href="extra_curricular_activities.php">Extra - curricular</a>
-                <a class="font-semibold" href="gallary.php">Gallery</a>
-                <a class="font-semibold" href="contact_us.php">Contact Us</a>
+                <a class="font-semibold" href="extra_curricular_activities">Extra - curricular</a>
+                <a class="font-semibold" href="gallary">Gallery</a>
+                <a class="font-semibold" href="contact_us">Contact Us</a>
 
             </nav>
 
@@ -171,10 +171,10 @@ $courses = $select->fetchAll(PDO::FETCH_ASSOC);
 
                     <div id="m-dropdown-m-results"
                         class="max-h-0 overflow-hidden transition-all duration-300 flex flex-col ml-3 mt-2 text-sm">
-                        <a href="jeeresult.php" class="py-1">JEE</a>
-                        <a href="neetresult.php" class="py-1">NEET</a>
-                        <a href="mht-cetresult.php" class="py-1">MHT-CET</a>
-                        <a href="boardresult.php" class="py-1">Board</a>
+                        <a href="jeeresult" class="py-1">JEE</a>
+                        <a href="neetresult" class="py-1">NEET</a>
+                        <a href="mht-cetresult" class="py-1">MHT-CET</a>
+                        <a href="boardresult" class="py-1">Board</a>
                     </div>
                 </div> -->
 
@@ -183,7 +183,7 @@ $courses = $select->fetchAll(PDO::FETCH_ASSOC);
                 <a class="font-semibold" href="enquiry">Enquiry</a>
 
                 <!-- NORMAL LINKS -->
-                <a href="about_us.php" class="font-semibold">About Us</a>
+                <a href="about_us" class="font-semibold">About Us</a>
                 <a href="extra_curricular_activities" class="font-semibold">Extra Curricular</a>
                 <a href="gallary" class="font-semibold">Gallery</a>
                 <a href="contact_us" class="font-semibold">Contact Us</a>

@@ -147,6 +147,20 @@ foreach ($results as &$row) {
 // echo "<pre>";
 // print_r($results);
 // exit;
+
+/* =========================
+   FETCH SLIDER IMAGES
+========================= */
+
+$sliderStmt = $conn->prepare("
+    SELECT image
+    FROM sliders
+    ORDER BY id DESC
+");
+
+$sliderStmt->execute();
+
+$sliders = $sliderStmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -674,6 +688,135 @@ our result animation end */
     .delay-2000 {
       animation-delay: 2s;
     }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: all 1s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      z-index: 1;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+    }
+
+    .content {
+      position: absolute;
+      top: 50%;
+      left: 10%;
+      transform: translateY(-50%);
+      color: white;
+      max-width: 600px;
+    }
+
+    .content h1 {
+      font-size: 3rem;
+      font-weight: 800;
+    }
+
+    .content p {
+      margin-top: 10px;
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+
+    .content a {
+      display: inline-block;
+      margin-top: 20px;
+      background: #E41C2A;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: none;
+      font-size: 24px;
+      padding: 10px 15px;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .left {
+      left: 10px;
+    }
+
+    .right {
+      right: 10px;
+    }
+
+    .dots {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: white;
+      opacity: 0.4;
+      cursor: pointer;
+    }
+
+    .dot.active {
+      opacity: 1;
+      background: #E41C2A;
+    }
+
+    /* MOBILE */
+    @media(max-width:768px) {
+      .content {
+        left: 5%;
+        right: 5%;
+      }
+
+      .content h1 {
+        font-size: 1.8rem;
+      }
+    }
+
+    #slider {
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity .8s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      z-index: 1;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #1e3a8a;
+    }
   </style>
 
 </head>
@@ -682,144 +825,36 @@ our result animation end */
 <body class="bg-lightbg">
 
   <!-- ================= HERO ================= -->
-  <section class="relative min-h-screen flex items-center justify-center bg-white text-white overflow-hidden px-6 md:px-16 mt-14">
+  <section class="relative bg-[#111827] py-10 overflow-hidden">
 
-    <!-- BACKGROUND -->
-    <!-- BACKGROUND WITH WAVE CLIP -->
-    <div class="absolute inset-0 overflow-hidden">
+    <!-- SLIDER WRAPPER -->
+    <div id="slider" class="relative w-full h-screen">
 
-      <div class="w-full h-full bg-cover bg-center bg-no-repeat
-              [clip-path:polygon(0%_0%,100%_0%,100%_85%,75%_92%,50%_85%,25%_92%,0%_85%)]"
-        style="background-image:url('images/hero-bg.png')">
-      </div>
+      <!-- SLIDES -->
+      <div id="slider" class="relative w-full object-cover h-screen">
 
-    </div>
+        <?php foreach ($sliders as $key => $slide): ?>
 
-    <!-- CANVAS -->
-    <canvas id="eduCanvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+          <div class="slide <?= $key == 0 ? 'active' : '' ?>">
 
-    <!-- OVERLAY -->
-    <div class="absolute inset-0 bg-[#021969]/10"></div>
+            <img
+              src="../src/uploads/sliders/<?= htmlspecialchars($slide['image']) ?>"
+              alt="" />
 
-    <!-- CONTENT WRAPPER -->
-    <div class="relative z-10 w-full max-w-7xl grid md:grid-cols-2 gap-10 items-center">
-
-      <!-- LEFT CONTENT -->
-      <div>
-        <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-          Shape Your Future with <br>
-          <span class="text-[#E41C2A]">
-            <span id="typing"></span><span>|</span>
-          </span>
-        </h1>
-
-        <p class="text-lg text-gray-200 mb-8">
-          JEE • NEET • MHT-CET • Board Exams – Expert Mentorship + Proven Results
-        </p>
-
-        <div class="flex gap-4">
-          <a href="enquiry.php"
-            class="inline-block bg-[#E41C2A] px-8 py-3 rounded-lg font-semibold hover:bg-red-700 transition duration-300">
-            Join Now
-          </a>
-
-          <!-- <button class="border border-white px-8 py-3 rounded-lg hover:bg-white hover:text-black font-bold">
-            Explore Courses
-          </button> -->
-        </div>
-      </div>
-
-      <!-- RIGHT FORM -->
-      <!-- RIGHT FORM -->
-      <div class="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-6 shadow-2xl max-w-md w-full mx-auto">
-
-        <!-- Heading -->
-        <div class="text-center mb-6">
-          <h3 class="text-3xl font-bold text-[#E41C2A]">
-            Book Free Demo
-          </h3>
-
-          <p class="text-sm text-gray-300">
-            Quick enquiry – get a call back
-          </p>
-        </div>
-
-        <!-- Form -->
-        <form id="enquiryForm" class="space-y-4">
-
-          <!-- Name -->
-          <div class="relative">
-            <input type="text" id="name" required
-              class="peer w-full p-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-yellow-400">
-
-            <label class="absolute left-3 top-3 text-gray-300 text-sm transition-all 
-        peer-focus:-top-2 peer-focus:text-xs peer-focus:text-yellow-400 
-        peer-valid:-top-2 peer-valid:text-xs bg-[#021969] px-1">
-
-              Full Name
-
-            </label>
-          </div>
-
-          <!-- Phone -->
-          <div class="relative">
-            <input type="tel" id="phone" maxlength="10" required
-              class="peer w-full p-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-yellow-400">
-
-            <label class="absolute left-3 top-3 text-gray-300 text-sm transition-all 
-        peer-focus:-top-2 peer-focus:text-xs peer-focus:text-yellow-400 
-        peer-valid:-top-2 peer-valid:text-xs bg-[#021969] px-1">
-
-              Phone Number
-
-            </label>
-          </div>
-
-          <!-- Course -->
-          <select id="course"
-            class="w-full p-3 rounded-lg bg-transparent border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400">
-
-            <option value="" class="text-black">Select Course</option>
-            <?php
-            for ($i = 0; $i < count($coursess); $i++) {
-            ?>
-              <option class="text-black" value="<?= $coursess[$i]['title']; ?>"><?= $coursess[$i]['title']; ?></option>
-            <?php } ?>
-          </select>
-
-          <!-- Enquiry Type -->
-          <select id="type"
-            class="w-full p-3 rounded-lg bg-transparent border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400">
-
-            <option value="" class="text-black">Enquiry Type</option>
-
-            <option class="text-black">Demo Class</option>
-            <option class="text-black">More Information</option>
-
-          </select>
-
-          <!-- Button -->
-          <div class="md:col-span-2 flex justify-center">
-
-            <button type="submit"
-              class="relative overflow-hidden bg-green-600 text-white py-3 px-8 rounded-lg font-semibold transition duration-300 hover:scale-105 hover:shadow-lg active:scale-95">
-
-              <span class="relative z-10">
-                Submit Enquiry
-              </span>
-
-              <!-- Ripple -->
-              <span class="absolute inset-0 bg-white opacity-10 scale-0 hover:scale-150 transition duration-500 rounded-full"></span>
-
-            </button>
+            <div class="overlay"></div>
 
           </div>
 
-        </form>
+        <?php endforeach; ?>
 
       </div>
 
-    </div>
+      <!-- ARROWS -->
+      <button onclick="prevSlide()" class="arrow left">❮</button>
+      <button onclick="nextSlide()" class="arrow right">❯</button>
+
+      <!-- DOTS -->
+      <div id="dots" class="dots"></div>
 
   </section>
 
@@ -1246,47 +1281,43 @@ bg-cover bg-center bg-no-repeat">
 
   <!-- hero slider new  -->
   <script>
-    const words = [
-      "Radiant Coaching",
-      "Your Success Journey",
-      "Top Rank Preparation",
-      "Future Doctors & Engineers"
-    ];
+    let index = 0;
+    const slides = document.querySelectorAll(".slide");
+    const dotsContainer = document.getElementById("dots");
 
-    let i = 0; // word index
-    let j = 0; // letter index
-    let current = "";
-    let isDeleting = false;
+    // create dots
+    slides.forEach((_, i) => {
+      const d = document.createElement("div");
+      d.classList.add("dot");
+      d.onclick = () => showSlide(i);
+      dotsContainer.appendChild(d);
+    });
 
-    const el = document.getElementById("typing");
+    const dots = document.querySelectorAll(".dot");
 
-    function typeEffect() {
-      current = words[i];
+    function showSlide(i) {
+      slides.forEach(s => s.classList.remove("active"));
+      dots.forEach(d => d.classList.remove("active"));
 
-      if (isDeleting) {
-        el.textContent = current.substring(0, j--);
-      } else {
-        el.textContent = current.substring(0, j++);
-      }
-
-      // typing complete
-      if (!isDeleting && j === current.length) {
-        isDeleting = true;
-        setTimeout(typeEffect, 1200); // pause
-        return;
-      }
-
-      // deleting complete
-      if (isDeleting && j === 0) {
-        isDeleting = false;
-        i = (i + 1) % words.length;
-      }
-
-      setTimeout(typeEffect, isDeleting ? 50 : 100);
+      slides[i].classList.add("active");
+      dots[i].classList.add("active");
+      index = i;
     }
 
-    // start typing
-    typeEffect();
+    function nextSlide() {
+      index = (index + 1) % slides.length;
+      showSlide(index);
+    }
+
+    function prevSlide() {
+      index = (index - 1 + slides.length) % slides.length;
+      showSlide(index);
+    }
+
+    showSlide(0);
+
+    // autoplay
+    setInterval(nextSlide, 4000);
   </script>
 
 

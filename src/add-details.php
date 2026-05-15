@@ -399,6 +399,7 @@ if (isset($_POST['save_details'])) {
                                 <div class="grid gap-4 lg:grid-cols-2">
 
                                     <textarea
+                                    id="description"
                                         name="program_highlight"
                                         rows="5"
                                         placeholder="Program Highlight"
@@ -481,6 +482,16 @@ if (isset($_POST['save_details'])) {
     </div>
 
     <script src="../dist/js/app.js"></script>
+
+     <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#description'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
 
 </body>
 

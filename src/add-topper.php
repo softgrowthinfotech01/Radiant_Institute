@@ -222,6 +222,7 @@ $res = $course->fetchAll(PDO::FETCH_ASSOC);
                                     </label>
 
                                     <textarea
+                                    id="description"
                                         name="description"
                                         rows="5"
                                         placeholder="Enter Description"
@@ -285,6 +286,16 @@ $res = $course->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <script src="../dist/js/app.js"></script>
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#description'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
 
 </body>
 

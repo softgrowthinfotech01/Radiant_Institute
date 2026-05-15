@@ -184,6 +184,7 @@ if(isset($_POST['save_activity'])){
                                     </label>
 
                                     <textarea
+                                    id="description"
                                         name="description"
                                         rows="5"
                                         required
@@ -307,6 +308,16 @@ if(isset($_POST['save_activity'])){
         button.parentElement.remove();
     }
 
+    </script>
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#description'))
+            .catch(error => {
+                console.error(error);
+            });
     </script>
 
 </body>

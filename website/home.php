@@ -204,29 +204,19 @@ $sliders = $sliderStmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /* gallary slider */
-    .card:hover {
-      transform: translateY(-8px) scale(1.03);
-      transition: 0.3s;
-    }
-
-    .slider {
-      background-repeat: no-repeat;
-
+        .slider-track {
+      display: flex;
+      width: max-content;
+      animation: scroll 5s linear infinite;
     }
 
     @keyframes scroll {
       0% {
         transform: translateX(0);
       }
-
       100% {
         transform: translateX(-50%);
       }
-    }
-
-    .slider-track {
-      width: max-content;
-      animation: scroll 30s linear infinite;
     }
 
     .slider-track:hover {
@@ -234,11 +224,11 @@ $sliders = $sliderStmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     .card {
-      transition: 0.3s ease;
+      transition: transform 0.3s ease;
     }
 
     .card:hover {
-      transform: translateY(-12px) scale(1.06);
+      transform: scale(1.05);
     }
 
     /* Mobile fix for parallax */
@@ -797,13 +787,27 @@ our result animation end */
       position: relative;
       overflow: hidden;
       border-radius: 20px;
+      background: #1e3a8a;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .slide {
       position: absolute;
       inset: 0;
+
       opacity: 0;
-      transition: opacity .8s ease;
+      transition: opacity .10s ease;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      overflow: hidden;
+
+      background: #1e3a8a;
     }
 
     .slide.active {
@@ -812,10 +816,16 @@ our result animation end */
     }
 
     .slide img {
-      width: 100%;
-      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+
+      width: auto;
+      height: auto;
+
       object-fit: contain;
-      background: #1e3a8a;
+
+      display: block;
+      margin: auto;
     }
   </style>
 
@@ -825,7 +835,7 @@ our result animation end */
 <body class="bg-lightbg">
 
   <!-- ================= HERO ================= -->
-  <section class="relative bg-[#111827] py-10 overflow-hidden">
+  <section class="relative bg-[#111827] overflow-hidden">
 
     <!-- SLIDER WRAPPER -->
     <div id="slider" class="relative w-full h-screen">
@@ -1134,43 +1144,48 @@ bg-cover bg-center bg-no-repeat">
 
   <!-- ================= PRODUCTS ================= -->
   <section id="products"
-    class="relative w-full py-16 md:py-20
-  bg-cover bg-center bg-no-repeat"
-    style="background-image: url('images/gallary-bg.png');">
+  class="relative w-full py-16 md:py-20 bg-cover bg-center bg-no-repeat"
+  style="background-image: url('images/gallary-bg.png');">
 
-    <!-- OVERLAY -->
-    <div class="absolute inset-0 "></div>
+  <!-- OVERLAY -->
+  <div class="absolute inset-0"></div>
 
-    <!-- CONTENT -->
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
+  <!-- CONTENT -->
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
 
-      <h2 class="text-center text-[#E41C2A] rounded-lg px-6 py-3 
-      text-3xl md:text-5xl font-bold  mb-10 md:mb-14">
-        Gallery
-      </h2>
+    <!-- TITLE -->
+    <h2 class="text-center text-[#E41C2A] rounded-lg px-6 py-3 
+      text-3xl md:text-5xl font-bold mb-10 md:mb-14">
+      Gallery
+    </h2>
 
+    <?php
+      $galleryItems = array_merge($galleries, $galleries);
+    ?>
 
-      <!-- SLIDER -->
-      <div class="overflow-hidden">
+    <div class="overflow-hidden">
 
-        <div class="slider-track flex gap-6 sm:gap-8 md:gap-10">
+      <div class="slider-track flex gap-6 sm:gap-8 md:gap-10">
 
-          <?php
-          for ($i = 0; $i < count($galleries); $i++) {
-            // print_r($galleries);exit;
-          ?>
-            <!-- CARD -->
-            <div class="bg-[#FDFDFD]/90 backdrop-blur p-4 sm:p-5 rounded-xl shadow-lg 
-          w-[220px] sm:w-64 md:w-72 flex-shrink-0 card">
-              <img src="../src/uploads/gallery/<?php echo $galleries[$i]['image']; ?>"
-                class="rounded-lg w-full h-40 sm:h-44 md:h-72 object-cover">
-            </div>
-          <?php } ?>
+        <?php for ($i = 0; $i < count($galleryItems); $i++) { ?>
 
-        </div>
+          <!-- CARD -->
+          <div class="bg-[#FDFDFD]/90 backdrop-blur p-4 sm:p-5 rounded-xl shadow-lg 
+            w-[220px] sm:w-64 md:w-72 flex-shrink-0 card">
+
+            <img 
+              src="../src/uploads/gallery/<?php echo $galleryItems[$i]['image']; ?>"
+              class="rounded-lg w-full h-40 sm:h-44 md:h-72 object-cover"
+              alt="gallery image">
+
+          </div>
+
+        <?php } ?>
+
       </div>
-
     </div>
+
+  </div>
   </section>
 
   <section class="bg-white py-16 px-6 md:px-16 bg-cover bg-center bg-no-repeatr" style="background-image: url('images/redbg3.png');">

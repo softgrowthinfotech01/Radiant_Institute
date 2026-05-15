@@ -15,6 +15,11 @@ $error = '';
 
 if (isset($_POST['save_slider'])) {
 
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && empty($_FILES)) {
+
+        $error = 'Image size is too large. Maximum allowed size is 5 MB';
+    }
+
     $title = trim($_POST['title']);
 
     $description = trim($_POST['description']);
@@ -22,68 +27,87 @@ if (isset($_POST['save_slider'])) {
     $imageName = '';
 
     /*
+|--------------------------------------------------------------------------
+| IMAGE UPLOAD
+|--------------------------------------------------------------------------
+*/
+
+    if (isset($_FILES['image'])) {
+
+        /*
     |--------------------------------------------------------------------------
-    | IMAGE UPLOAD
+    | FILE SIZE SERVER ERROR
     |--------------------------------------------------------------------------
     */
 
-    if (
-        isset($_FILES['image']) &&
-        $_FILES['image']['error'] == 0
-    ) {
+        if ($_FILES['image']['error'] == 1) {
 
-        /*
+            $error = 'Image size exceeds server upload limit';
+        } elseif ($_FILES['image']['error'] == 2) {
+
+            $error = 'Image size exceeds allowed form limit';
+        } elseif ($_FILES['image']['error'] != 0) {
+
+            $error = 'Failed to upload image';
+        } else {
+
+            /*
         |--------------------------------------------------------------------------
         | VALIDATE IMAGE SIZE
         |--------------------------------------------------------------------------
         */
 
-        $maxSize = 5 * 1024 * 1024;
+            $maxSize = 5 * 1024 * 1024;
 
-        if ($_FILES['image']['size'] > $maxSize) {
+            if ($_FILES['image']['size'] > $maxSize) {
 
-            $error =
-                'Image size must be less than 5 MB';
-        } else {
+                $error = 'Image size must be less than 5 MB';
+            } else {
 
-            /*
+                /*
             |--------------------------------------------------------------------------
             | VALIDATE IMAGE TYPE
             |--------------------------------------------------------------------------
             */
 
-            $allowedTypes = [
-                'image/jpeg',
-                'image/png',
-                'image/webp',
-                'image/jpg'
-            ];
+                $allowedTypes = [
+                    'image/jpeg',
+                    'image/png',
+                    'image/webp',
+                    'image/jpg'
+                ];
 
-            if (
-                !in_array(
-                    $_FILES['image']['type'],
-                    $allowedTypes
-                )
-            ) {
+                if (
+                    !in_array(
+                        $_FILES['image']['type'],
+                        $allowedTypes
+                    )
+                ) {
 
-                $error =
-                    'Only JPG, PNG and WEBP images are allowed';
-            } else {
+                    $error =
+                        'Only JPG, PNG and WEBP images are allowed';
+                } else {
 
-                /*
+                    /*
                 |--------------------------------------------------------------------------
                 | UPLOAD IMAGE
                 |--------------------------------------------------------------------------
                 */
 
-                $imageName =
-                    time() . '_' .
-                    $_FILES['image']['name'];
+                    $imageName =
+                        time() . '_' .
+                        $_FILES['image']['name'];
 
-                move_uploaded_file(
-                    $_FILES['image']['tmp_name'],
-                    'uploads/sliders/' . $imageName
-                );
+                    if (
+                        !move_uploaded_file(
+                            $_FILES['image']['tmp_name'],
+                            'uploads/sliders/' . $imageName
+                        )
+                    ) {
+
+                        $error = 'Failed to save image';
+                    }
+                }
             }
         }
     } else {
@@ -206,7 +230,7 @@ if (isset($_POST['save_slider'])) {
                     <!-- FORM -->
 
                     <form method="POST"
-                        enctype="multipart/form-data">
+                        enctype="multipart/form-data" id="sliderForm">
 
                         <div class="rounded-2xl border border-slate-200 bg-white shadow-card dark:border-slate-800 dark:bg-slate-900">
 
@@ -262,6 +286,7 @@ if (isset($_POST['save_slider'])) {
                                     </label>
 
                                     <input
+                                        id="image"
                                         type="file"
                                         name="image"
                                         accept="image/*"
@@ -314,6 +339,36 @@ if (isset($_POST['save_slider'])) {
     </div>
 
     <script src="../dist/js/app.js"></script>
+
+    <script>
+        document
+            .getElementById('sliderForm')
+            .addEventListener('submit', function(e) {
+
+                const imageInput =
+                    document.getElementById('image');
+
+                if (imageInput.files.length > 0) {
+
+                    const file = imageInput.files[0];
+
+                    const maxSize =
+                        5 * 1024 * 1024;
+
+                    if (file.size > maxSize) {
+
+                        e.preventDefault();
+
+                        alert(
+                            'Image size must be less than 5 MB'
+                        );
+
+                        return false;
+                    }
+                }
+
+            });
+    </script>
 
     <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 

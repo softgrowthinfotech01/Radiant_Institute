@@ -103,7 +103,7 @@ echo "Document Assigned!";
                     <!-- FORM -->
 
                     <form method="POST"
-                        enctype="multipart/form-data">
+                        enctype="multipart/form-data" id="sliderForm">
 
                         <div class="rounded-2xl border border-slate-200 bg-white shadow-card dark:border-slate-800 dark:bg-slate-900">
 
@@ -159,6 +159,7 @@ echo "Document Assigned!";
                                     </label>
 
                                     <input
+                                        id="image"
                                         type="file"
                                         name="image"
                                         accept="image/*"
@@ -211,6 +212,36 @@ echo "Document Assigned!";
     </div>
 
     <script src="../../dist/js/app.js"></script>
+
+    <script>
+        document
+            .getElementById('sliderForm')
+            .addEventListener('submit', function(e) {
+
+                const imageInput =
+                    document.getElementById('image');
+
+                if (imageInput.files.length > 0) {
+
+                    const file = imageInput.files[0];
+
+                    const maxSize =
+                        5 * 1024 * 1024;
+
+                    if (file.size > maxSize) {
+
+                        e.preventDefault();
+
+                        alert(
+                            'Image size must be less than 5 MB'
+                        );
+
+                        return false;
+                    }
+                }
+
+            });
+    </script>
 
     <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 

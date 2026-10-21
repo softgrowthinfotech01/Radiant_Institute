@@ -114,7 +114,7 @@ if (isset($_POST['update_slider'])) {
         ':id' => $id
     ]);
 
-    header('location:sliders.php');
+    header('location:slider');
 
     exit;
 }

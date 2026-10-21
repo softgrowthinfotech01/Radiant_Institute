@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(!isset($_SESSION['admin'])){
+if (!isset($_SESSION['admin'])) {
 
     header('location:login');
 
@@ -9,7 +9,14 @@ if(!isset($_SESSION['admin'])){
 
 include('../conn.php');
 
-if(isset($_POST['save_activity'])){
+if (isset($_POST['save_activity'])) {
+
+
+    $description = trim($_POST['description']);
+
+    if (empty($description)) {
+        die('Description is required');
+    }
 
     $occasion = trim($_POST['occasion']);
 
@@ -49,18 +56,18 @@ if(isset($_POST['save_activity'])){
     |--------------------------------------------------------------------------
     */
 
-    if(isset($_FILES['images'])){
+    if (isset($_FILES['images'])) {
 
-        foreach($_FILES['images']['tmp_name'] as $key => $tmp_name){
+        foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
 
-            if($_FILES['images']['error'][$key] == 0){
+            if ($_FILES['images']['error'][$key] == 0) {
 
                 $image_name =
-                time().'_'.$_FILES['images']['name'][$key];
+                    time() . '_' . $_FILES['images']['name'][$key];
 
                 move_uploaded_file(
                     $tmp_name,
-                    'uploads/activities/'.$image_name
+                    'uploads/activities/' . $image_name
                 );
 
                 $stmt = $conn->prepare("
@@ -184,10 +191,10 @@ if(isset($_POST['save_activity'])){
                                     </label>
 
                                     <textarea
-                                    id="description"
+                                        id="description"
                                         name="description"
                                         rows="5"
-                                        required
+
                                         placeholder="Enter Description"
                                         class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none ring-brand-500/30 placeholder:text-slate-400 focus:border-brand-300 focus:bg-white focus:ring-4 dark:border-slate-700 dark:bg-slate-950 dark:focus:bg-slate-950"></textarea>
 
@@ -271,19 +278,18 @@ if(isset($_POST['save_activity'])){
     <script src="../dist/js/app.js"></script>
 
     <script>
+        function addImageField() {
 
-    function addImageField(){
+            const container =
+                document.getElementById('image-fields');
 
-        const container =
-        document.getElementById('image-fields');
+            const wrapper =
+                document.createElement('div');
 
-        const wrapper =
-        document.createElement('div');
+            wrapper.className =
+                'flex items-center gap-3';
 
-        wrapper.className =
-        'flex items-center gap-3';
-
-        wrapper.innerHTML = `
+            wrapper.innerHTML = `
         
             <input
                 type="file"
@@ -300,24 +306,33 @@ if(isset($_POST['save_activity'])){
             </button>
         `;
 
-        container.appendChild(wrapper);
-    }
+            container.appendChild(wrapper);
+        }
 
-    function removeImageField(button){
+        function removeImageField(button) {
 
-        button.parentElement.remove();
-    }
-
+            button.parentElement.remove();
+        }
     </script>
 
     <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 
     <script>
+        let editor;
+
         ClassicEditor
             .create(document.querySelector('#description'))
+            .then(newEditor => {
+                editor = newEditor;
+            })
             .catch(error => {
                 console.error(error);
             });
+
+        document.querySelector('form').addEventListener('submit', function() {
+            document.querySelector('#description').value =
+                editor.getData();
+        });
     </script>
 
 </body>

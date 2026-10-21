@@ -290,6 +290,10 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     Select Course
 
                                 </label>
+                                <input
+                                    type="hidden"
+                                    name="course_id"
+                                    value="<?php echo $detail['course_id']; ?>">
 
                                 <select
                                     name="course_id"
@@ -367,6 +371,7 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                     <textarea
                                         name="program_highlight"
+                                        id="program_highlight"
                                         rows="5"
                                         class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-950"><?php echo $detail['program_highlight'] ?? ''; ?></textarea>
 
@@ -383,14 +388,14 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 </p>
 
                                                 <img
-    src="uploads/course-details/<?php echo $detail['highlight_image']; ?>"
-    style="width:120px; height:120px;"
-    class="object-cover rounded-lg border border-slate-200 dark:border-slate-700" />
+                                                    src="uploads/course-details/<?php echo $detail['highlight_image']; ?>"
+                                                    style="width:120px; height:120px;"
+                                                    class="object-cover rounded-lg border border-slate-200 dark:border-slate-700" />
 
                                             </div>
 
                                             <a
-                                                href="delete-image.php?id=<?php echo $detail['id']; ?>&table=course_details&folder=uploads/course-details&redirect=edit-details.php&foreign_key=id"
+                                                href="delete-course-detail-image.php?id=<?php echo $detail['id']; ?>&table=course_details&folder=uploads/course-details&redirect=edit-details.php&foreign_key=id"
                                                 onclick="return confirm('Delete this image?')"
                                                 class="inline-flex mt-1 items-center justify-center rounded-xl bg-red-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-600">
 
@@ -475,6 +480,25 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <script src="../dist/js/app.js"></script>
 
+     <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+
+    <script>
+        let editor;
+
+        ClassicEditor
+            .create(document.querySelector('#program_highlight'))
+            .then(newEditor => {
+                editor = newEditor;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+        document.querySelector('form').addEventListener('submit', function() {
+            document.querySelector('#program_highlight').value =
+                editor.getData();
+        });
+    </script>
 </body>
 
 </html>

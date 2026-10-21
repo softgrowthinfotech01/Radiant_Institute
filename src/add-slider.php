@@ -146,7 +146,7 @@ if (isset($_POST['save_slider'])) {
             ':image' => $imageName
         ]);
 
-        header('location:slider.php');
+        header('location:slider');
 
         exit;
     }

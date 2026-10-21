@@ -223,7 +223,7 @@ $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <textarea
                                         name="description"
                                         rows="5"
-                                        required
+                                        id="description"
                                         class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none ring-brand-500/30 focus:border-brand-300 focus:bg-white focus:ring-4 dark:border-slate-700 dark:bg-slate-950 dark:focus:bg-slate-950"><?php echo $activity['description']; ?></textarea>
 
                                 </div>
@@ -382,6 +382,27 @@ $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             button.parentElement.remove();
         }
+    </script>
+
+    
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+
+    <script>
+        let editor;
+
+        ClassicEditor
+            .create(document.querySelector('#description'))
+            .then(newEditor => {
+                editor = newEditor;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+        document.querySelector('form').addEventListener('submit', function() {
+            document.querySelector('#description').value =
+                editor.getData();
+        });
     </script>
 
 </body>

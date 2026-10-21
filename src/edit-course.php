@@ -53,7 +53,10 @@ if (isset($_POST['update_course'])) {
         ':id' => $id
     ]);
 
-    if (isset($_FILES['images'])) {
+   if (
+    isset($_FILES['images']) &&
+    !empty($_FILES['images']['name'][0])
+) {
 
         foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
 
@@ -64,7 +67,7 @@ if (isset($_POST['update_course'])) {
 
                 move_uploaded_file(
                     $tmp_name,
-                    '../uploads/courses/' . $image_name
+                    'uploads/courses/' . $image_name
                 );
 
                 $stmt = $conn->prepare("
@@ -162,7 +165,7 @@ $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                     </div>
 
-                    <form method="POST">
+                    <form method="POST" enctype="multipart/form-data">
 
                         <div class="space-y-6">
 

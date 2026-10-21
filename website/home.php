@@ -32,28 +32,13 @@ foreach ($coursess as &$course) {
 
 $extra = $conn->prepare("
 SELECT 
-    extra_curricular_activities.id,
-    extra_curricular_activities.occasion,
-    extra_curricular_activities.description,
-    COALESCE(
-        JSON_ARRAYAGG(activity_images.image),
-        JSON_ARRAY()
-    ) AS images
-FROM extra_curricular_activities
-LEFT JOIN activity_images 
-    ON extra_curricular_activities.id = activity_images.activity_id
-    AND activity_images.image IS NOT NULL
-    AND activity_images.image != ''
-GROUP BY extra_curricular_activities.id
+   * FROm activity_images 
 ");
 
 $extra->execute();
 
 $extras = $extra->fetchAll(PDO::FETCH_ASSOC);
 
-foreach ($extras as &$course) {
-  $course['images'] = json_decode($course['images'], true);
-}
 // echo "<pre>";
 // print_r($extras);
 // exit;
@@ -129,7 +114,7 @@ LEFT JOIN result_images
     AND result_images.image != ''
 
 GROUP BY results.id
-ORDER BY results.year DESC LIMIT 2
+ORDER BY results.year DESC LIMIT 4
 ");
 
 $result->execute();
@@ -179,7 +164,7 @@ $sliders = $sliderStmt->fetchAll(PDO::FETCH_ASSOC);
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Basic&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-<!-- <link rel="stylesheet" href="../dist/css/output.css">
+  <!-- <link rel="stylesheet" href="../dist/css/output.css">
 <script src="../dist/js/app.js"></script> -->
   <style>
     html,
@@ -205,7 +190,7 @@ $sliders = $sliderStmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /* gallary slider */
-        .slider-track {
+    .slider-track {
       display: flex;
       width: max-content;
       animation: scroll 5s linear infinite;
@@ -215,6 +200,7 @@ $sliders = $sliderStmt->fetchAll(PDO::FETCH_ASSOC);
       0% {
         transform: translateX(0);
       }
+
       100% {
         transform: translateX(-50%);
       }
@@ -692,12 +678,6 @@ our result animation end */
       z-index: 1;
     }
 
-    .overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.55);
-    }
-
     .content {
       position: absolute;
       top: 50%;
@@ -809,6 +789,7 @@ our result animation end */
       overflow: hidden;
 
       background: #1e3a8a;
+      height: 100%;
     }
 
     .slide.active {
@@ -820,10 +801,10 @@ our result animation end */
       max-width: 100%;
       max-height: 100%;
 
-      width: auto;
-      height: auto;
+      width: 100%;
+      height: 89%;
 
-      object-fit: contain;
+      object-fit: fill;
 
       display: block;
       margin: auto;
@@ -836,17 +817,17 @@ our result animation end */
 <body class="bg-lightbg">
 
   <!-- ================= HERO ================= -->
-  <section class="relative bg-[#111827] overflow-hidden">
+  <section class="relative bg-[#111827] overflow-hidden xl:lg:md:top-[0px] top-[5%]">
 
     <!-- SLIDER WRAPPER -->
-    <div id="slider" class="relative w-full h-screen">
+    <!-- <div id="slider" class="relative w-full h-screen"> -->
 
       <!-- SLIDES -->
-      <div id="slider" class="relative w-full object-cover h-screen">
+      <div id="slider" class="relative w-full object-cover md:h-screen h-[35vh] top-5 md:top-12">
 
         <?php foreach ($sliders as $key => $slide): ?>
-
-          <div class="slide <?= $key == 0 ? 'active' : '' ?>">
+   
+          <div class="slide <?= $key == 1 ? 'active' : '' ?>">
 
             <img
               src="../src/uploads/sliders/<?= htmlspecialchars($slide['image']) ?>"
@@ -884,7 +865,7 @@ bg-cover bg-center bg-no-repeat">
     </div>
 
     <!-- GRID -->
-    <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
+    <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
 
       <!-- CARD -->
       <?php
@@ -900,7 +881,7 @@ bg-cover bg-center bg-no-repeat">
           <div class="overflow-hidden">
 
             <img src="../src/uploads/courses/<?= $coursess[$i]['images'][0]; ?>"
-              class="course-img w-full h-48 object-cover transition duration-700 group-hover:scale-105">
+              class="course-img w-full h-48 object-fill transition duration-700 group-hover:scale-105">
           </div>
 
           <!-- CONTENT -->
@@ -913,7 +894,7 @@ bg-cover bg-center bg-no-repeat">
               <?= $coursess[$i]['description']; ?>
             </p>
 
-            <button class="mt-4 text-[#1B3252] font-semibold flex items-center gap-2 group explore-btn">
+            <button class="mt-4 text-[#1B3252] font-semibold flex items-center gap-2 group explore-btn" onclick="window.location.href='jee?id=<?= $coursess[$i]['id']; ?>'">
               Explore
               <span class="arrow transition-transform duration-300 group-hover:translate-x-1">→</span>
             </button>
@@ -1008,22 +989,16 @@ bg-cover bg-center bg-no-repeat">
 
         <div class="text-center mb-14">
           <h2 class="text-3xl md:text-5xl font-bold text-[#E41C2A]">
-            <?= htmlspecialchars($extra['title']); ?>
+            <?= htmlspecialchars($extra['year']); ?>
           </h2>
-
-          <p class="text-gray-600 mt-3">
-            <?= htmlspecialchars($extra['description']); ?>
-          </p>
         </div>
 
-        <div class="grid md:grid-cols-1 lg:grid-cols-1 gap-10">
+        <div class="grid md:grid-cols-1 lg:grid-cols-1 gap-10 m-auto">
 
           <?php
           $firstImage = reset($images); // get first image
           if ($firstImage):
           ?>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
 
               <div class="gallery-card group" data-aos="zoom-in">
                 <div class="relative overflow-hidden rounded-2xl shadow-2xl cursor-pointer">
@@ -1037,7 +1012,6 @@ bg-cover bg-center bg-no-repeat">
                 </div>
               </div>
 
-            </div>
 
           <?php endif; ?>
 
@@ -1098,7 +1072,6 @@ bg-cover bg-center bg-no-repeat">
   </section>
 
 
-
   <!-- extra-curricular -->
 
   <section class="relative bg-gray-950 text-white py-20 px-6 md:px-16 overflow-hidden">
@@ -1121,18 +1094,19 @@ bg-cover bg-center bg-no-repeat">
     <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
 
       <?php
-      for ($i = 0; $i < 2; $i++) {
+      for ($i = 0; $i < 3; $i++) {
       ?>
         <!-- CARD -->
         <div class="card group" onmousemove="tilt(event,this)" onmouseleave="resetTilt(this)">
           <div class="card-inner">
 
-            <img src="../src/uploads/activities/<?php echo $extras[$i]['images'][0]; ?>"
-              class="img">
+            <img src="../src/uploads/activities/<?php echo $extras[$i]['image']; ?>"
+              class="img cursor-pointer"
+              onclick="openImgModal('../src/uploads/activities/<?php echo $extras[$i]['image']; ?>')">
 
-            <div class="overlay">
-              <h3><?= $extras[$i]['occasion']; ?></h3>
-              <p><?= $extras[$i]['description']; ?></p>
+            <div class="overlay pointer-events-none">
+              <!-- <h3><?= $extras[$i]['occasion']; ?></h3>
+              <p><?= $extras[$i]['description']; ?></p> -->
             </div>
 
           </div>
@@ -1141,52 +1115,54 @@ bg-cover bg-center bg-no-repeat">
 
     </div>
   </section>
+<?php include "model.php"; ?>
 
 
   <!-- ================= PRODUCTS ================= -->
   <section id="products"
-  class="relative w-full py-16 md:py-20 bg-cover bg-center bg-no-repeat"
-  style="background-image: url('images/gallary-bg.png');">
+    class="relative w-full py-16 md:py-20 bg-cover bg-center bg-no-repeat"
+    style="background-image: url('images/gallary-bg.png');">
 
-  <!-- OVERLAY -->
-  <div class="absolute inset-0"></div>
+    <!-- OVERLAY -->
+    <div class="absolute inset-0"></div>
 
-  <!-- CONTENT -->
-  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
+    <!-- CONTENT -->
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
 
-    <!-- TITLE -->
-    <h2 class="text-center text-[#E41C2A] rounded-lg px-6 py-3 
+      <!-- TITLE -->
+      <h2 class="text-center text-[#E41C2A] rounded-lg px-6 py-3 
       text-3xl md:text-5xl font-bold mb-10 md:mb-14">
-      Gallery
-    </h2>
+        Gallery
+      </h2>
 
-    <?php
+      <?php
       $galleryItems = array_merge($galleries, $galleries);
-    ?>
+      ?>
 
-    <div class="overflow-hidden">
+      <div class="overflow-hidden">
 
-      <div class="slider-track flex gap-6 sm:gap-8 md:gap-10">
+        <div class="slider-track flex gap-6 sm:gap-8 md:gap-10">
 
-        <?php for ($i = 0; $i < count($galleryItems); $i++) { ?>
+          <?php for ($i = 0; $i < count($galleryItems); $i++) { ?>
 
-          <!-- CARD -->
-          <div class="bg-[#FDFDFD]/90 backdrop-blur p-4 sm:p-5 rounded-xl shadow-lg 
+            <!-- CARD -->
+            <div class="bg-[#FDFDFD]/90 backdrop-blur p-4 sm:p-5 rounded-xl shadow-lg 
             w-[220px] sm:w-64 md:w-72 flex-shrink-0 card">
 
-            <img 
-              src="../src/uploads/gallery/<?php echo $galleryItems[$i]['image']; ?>"
-              class="rounded-lg w-full h-40 sm:h-44 md:h-72 object-cover"
-              alt="gallery image">
+             <img
+  src="../src/uploads/gallery/<?php echo $galleryItems[$i]['image']; ?>"
+  class="rounded-lg w-full h-40 sm:h-44 md:h-72 object-cover cursor-pointer"
+  alt="gallery image"
+  onclick="openImgModal('../src/uploads/gallery/<?php echo $galleryItems[$i]['image']; ?>')">
 
-          </div>
+            </div>
 
-        <?php } ?>
+          <?php } ?>
 
+        </div>
       </div>
-    </div>
 
-  </div>
+    </div>
   </section>
 
   <section class="bg-white py-16 px-6 md:px-16 bg-cover bg-center bg-no-repeatr" style="background-image: url('images/redbg3.png');">
@@ -1261,11 +1237,31 @@ bg-cover bg-center bg-no-repeat">
 
   </section>
 
+  <!-- Image Popup Modal -->
+<div id="imgModal" onclick="closeImgModal()"
+  class="fixed inset-0 bg-black/90 hidden items-center justify-center z-[9999] p-4">
+  <span onclick="closeImgModal()"
+    class="absolute top-5 right-8 text-white text-4xl cursor-pointer hover:text-gray-300">&times;</span>
+  <img id="imgModalContent" src=""
+    class="max-w-[90%] max-h-[90%] rounded-lg shadow-2xl" onclick="event.stopPropagation()">
+</div>
 
+<script>
+  function openImgModal(src) {
+    document.getElementById('imgModalContent').src = src;
+    const modal = document.getElementById('imgModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+  }
 
-
-
-
+  function closeImgModal() {
+    const modal = document.getElementById('imgModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.style.overflow = 'auto';
+  }
+</script>
 
   <!-- ================= FOOTER ================= -->
   <?php include 'footer.php'; ?>
@@ -1282,18 +1278,6 @@ bg-cover bg-center bg-no-repeat">
       once: true
     });
   </script>
-
-
-
-
-
-
-
-
-
-
-
-
 
   <!-- hero slider new  -->
   <script>

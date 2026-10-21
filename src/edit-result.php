@@ -61,7 +61,7 @@ if(isset($_POST['update_result'])){
 
                 move_uploaded_file(
                     $tmp_name,
-                    '../uploads/results/'.$image_name
+                    'uploads/results/'.$image_name
                 );
 
                 $stmt = $conn->prepare("
@@ -190,7 +190,7 @@ $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="mb-6">
 
                         <p class="text-sm font-medium text-brand-600 dark:text-brand-400">
-                            Gallery
+                            Results
                         </p>
 
                         <h2 class="text-display-sm text-slate-900 dark:text-white">
@@ -208,7 +208,7 @@ $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                 <!-- COURSE -->
 
-                                <div>
+                                <!-- <div>
 
                                     <label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
 
@@ -235,7 +235,7 @@ $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                     </select>
 
-                                </div>
+                                </div> -->
 
                                 <!-- YEAR -->
 

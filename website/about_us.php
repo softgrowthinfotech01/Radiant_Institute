@@ -74,7 +74,7 @@ style="background-image:url('images/hero-bg.png')"></div>
     About Radiant
   </h1>
   <p class="mt-4 text-gray-200 max-w-2xl mx-auto">
-    Shaping future doctors & engineers with excellence, discipline and results.
+    A step Towards Successful Career
   </p>
 </div>
 
@@ -157,7 +157,7 @@ d="M0,160L80,150C160,140,320,120,480,110C640,100,800,100,960,120C1120,140,1280,1
 <div class="grid md:grid-cols-4 gap-10 max-w-6xl mx-auto">
 
 <div data-aos="zoom-in">
-  <div class="counter" data-count="5000">0</div>
+  <div class="counter" data-count="4000">0</div>
   <p>Students Trained</p>
 </div>
 
@@ -167,12 +167,12 @@ d="M0,160L80,150C160,140,320,120,480,110C640,100,800,100,960,120C1120,140,1280,1
 </div>
 
 <div data-aos="zoom-in">
-  <div class="counter" data-count="50">0</div>
+  <div class="counter" data-count="10">0</div>
   <p>Expert Faculty</p>
 </div>
 
 <div data-aos="zoom-in">
-  <div class="counter" data-count="10">0</div>
+  <div class="counter" data-count="13">0</div>
   <p>Years Experience</p>
 </div>
 

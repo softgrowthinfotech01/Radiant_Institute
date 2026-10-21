@@ -19,7 +19,7 @@ $sel = $ret->fetch(PDO::FETCH_ASSOC);
 // print_r($res);
 // exit();
 
-if($res == null){
+if ($res == null) {
    echo "<script>alert('please fill details for this course.');</script>";
    echo "<script>window.location.href='home';</script>";
 }
@@ -106,6 +106,10 @@ if($res == null){
          backdrop-filter: blur(10px);
          border: 1px solid rgba(255, 255, 255, 0.2);
       }
+
+      .lists-dicstype li {
+         list-style: disc !important;
+      }
    </style>
 
 </head>
@@ -125,15 +129,23 @@ if($res == null){
 
       <div class="relative z-10 text-center px-6">
          <h1 class="text-4xl md:text-6xl font-bold mb-4">
-            JEE Preparation Program
+            <?= $sel['title']; ?> Preparation Program
          </h1>
+         <?php 
+          
+         if($sel['title'] == 'JEE'){
+         ?>
          <p class="text-lg text-gray-200 max-w-2xl mx-auto">
-            Crack IIT-JEE with India's best faculty, structured learning & AIR-level strategy.
+            Crack IIT-JEE Mains and Advance with Chandrapur's best faculty.
          </p>
-
+<?php }else{ ?>
+ <p class="text-lg text-gray-200 max-w-2xl mx-auto">
+            Crack <?= $sel['title']; ?> with Chandrapur's best faculty.
+         </p>
+<?php } ?>
          <a href="enquiry.php"
             class="ctaBtn inline-block mt-6 px-8 py-3 bg-red-500 text-black font-bold rounded-full shadow-lg hover:scale-105 transition duration-300">
-            Enroll Now
+            More information
          </a>
       </div>
 
@@ -144,39 +156,28 @@ if($res == null){
 
       <div class="max-w-6xl mx-auto text-center mb-14" data-aos="fade-up">
          <h2 class="text-3xl md:text-5xl font-bold text-[#E41C2A]">
-           About OUR Program
+            More information about our <?= $sel['title']; ?> program
          </h2>
          <p class="text-gray-600 mt-4">
-            Designed for serious aspirants aiming for IITs & top engineering colleges.
+            Designed for serious aspirants.
          </p>
       </div>
 
-      <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+      <div class="grid md:grid-cols-1 gap-8 max-w-6xl mx-auto">
 
          <?php
          if ($sel) {
          ?>
             <div class="card bg-white p-6 rounded-2xl shadow-lg place-items-center" data-aos="fade-up">
-              <?= $sel['description']; ?>
+               <?= $sel['description']; ?>
             </div>
          <?php } ?>
-        
+
       </div>
 
-   </section>
-   <!-- ================= OVERVIEW ================= -->
-   <section class="relative py-20 px-6 md:px-16 bg-[#DCE0EC] glow">
 
-      <div class="max-w-6xl mx-auto text-center mb-14" data-aos="fade-up">
-         <h2 class="text-3xl md:text-5xl font-bold text-[#E41C2A]">
-            Why Choose Our JEE Program
-         </h2>
-         <p class="text-gray-600 mt-4">
-            Designed for serious aspirants aiming for IITs & top engineering colleges.
-         </p>
-      </div>
 
-      <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mt-4">
 
          <?php
          if ($res['why_title_1']) {
@@ -218,34 +219,57 @@ if($res == null){
 
    </section>
 
+   <!-- ================= result ================= -->
+   <section class="py-10 px-6 md:px-16 bg-[#fff] text-white text-center">
+      <a href="jeeresult"
+            class="ctaBtn inline-block mt-6 px-8 py-3 bg-red-500 text-black font-bold rounded-full shadow-lg hover:scale-105 transition duration-300">
+            See Our Results
+         </a>
+   </section>
+   <!-- <section class="py-10 px-6 md:px-16 bg-[#fff] text-white text-center">
+      <a href="result?id=<?= $id ; ?>&co=<?= $sel['title']; ?>"
+            class="ctaBtn inline-block mt-6 px-8 py-3 bg-red-500 text-black font-bold rounded-full shadow-lg hover:scale-105 transition duration-300">
+            See Our Results
+         </a>
+   </section> -->
+
    <!-- ================= FEATURES ================= -->
    <section class="py-20 px-6 md:px-16 bg-[#021969] text-white">
+
+      <div class="max-w-6xl mx-auto text-center mb-14" data-aos="fade-up">
+         <h2 class="text-3xl md:text-5xl font-bold text-[#E41C2A]">
+            Why Choose Our <?= $sel['title']; ?> Program
+         </h2>
+         <p class="text-gray-600 mt-4">
+            Designed for serious aspirants.
+         </p>
+      </div>
 
       <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
 
          <!-- IMAGE -->
-          <?php
-          if($res['highlight_image']){
-          ?>
-         <div data-aos="zoom-in">
-            <img src="../src/uploads/course-details/<?= $res['highlight_image']; ?>" class="rounded-2xl shadow-xl">
-         </div>
-<?php } ?>
+         <?php
+         if ($res['highlight_image']) {
+         ?>
+            <div data-aos="zoom-in">
+               <img src="../src/uploads/course-details/<?= $res['highlight_image']; ?>" class="rounded-2xl shadow-xl">
+            </div>
+         <?php } ?>
          <!-- CONTENT -->
-          <?php if($res['program_highlight']){ ?>
-         <div data-aos="fade-left">
+         <?php if ($res['program_highlight']) { ?>
+            <div data-aos="fade-left">
 
-            <h2 class="text-3xl md:text-5xl font-bold mb-6 text-[#E41C2A]">
-               Program Highlights
-            </h2>
+               <h2 class="text-3xl md:text-5xl font-bold mb-6 text-[#E41C2A]">
+                  Program Highlights
+               </h2>
 
-            <ul class="space-y-4 text-lg">
+               <ul class="space-y-4 text-2xl md:text-3xl font-bold list-disc">
 
-               <li><?= $res['program_highlight']; ?></li>
+                  <li class="lists-dicstype"><?= $res['program_highlight']; ?></li>
 
-            </ul>
+               </ul>
 
-         </div>
+            </div>
          <?php } ?>
 
       </div>
@@ -257,35 +281,37 @@ if($res == null){
 
       <div class="text-center mb-14">
          <h2 class="text-3xl md:text-5xl font-bold text-[#E41C2A]">
-            Course Modules
+            Our Scholership program for <?= $sel['title']; ?>
          </h2>
       </div>
 
-      <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-         <?php
-         if ($res['module_title_1']) {
-         ?>
-            <div class="card glass p-6 rounded-2xl text-white bg-[#021969]" data-aos="flip-left">
-               <h3 class="font-bold text-xl mb-2"><?= $res['module_title_1'] ?></h3>
-               <p><?= $res['module_description_1']; ?></p>
+      <div class="grid md:grid-cols-1 gap-8 max-w-6xl mx-auto">
+         <div class="card glass p-6 rounded-2xl text-white bg-[#021969]" data-aos="flip-left">
+            <h3 class="font-bold text-xl mb-4">🎓 Scholarship Details</h3>
+
+            <ul class="space-y-3 list-disc pl-5">
+               <li>Students must appear for the Scholarship Examination conducted by our institute.</li>
+               <li>The examination will be of <strong>100 questions</strong>.</li>
+               <li>Scholarships will be awarded based on the marks obtained in the examination.</li>
+               <li>Students securing higher ranks will receive greater fee concessions.</li>
+               <li>The scholarship is applicable only for the current academic session.</li>
+               <li>Students must submit all required documents during admission.</li>
+               <li>The scholarship amount cannot be exchanged for cash.</li>
+               <li>Scholarship benefits are non-transferable.</li>
+               <li>Regular attendance and good academic performance may be required to continue the scholarship.</li>
+               <li>The institute reserves the right to modify scholarship rules and eligibility criteria.</li>
+            </ul>
+
+            <div class="mt-5 p-4 bg-white/10 rounded-xl">
+               <h4 class="font-semibold mb-2">Scholarship Slabs</h4>
+               <ul class="space-y-1 text-sm">
+                  <li>🏆 90–100 Marks : Up to 50% Scholarship</li>
+                  <li>🥇 80–89 Marks : Up to 30% Scholarship</li>
+                  <li>🥈 70–79 Marks : Up to 20% Scholarship</li>
+                  <li>🥉 60–69 Marks : Up to 10% Scholarship</li>
+               </ul>
             </div>
-         <?php } ?>
-         <?php
-         if ($res['module_title_1']) {
-         ?>
-            <div class="card glass p-6 rounded-2xl text-white bg-[#021969]" data-aos="flip-left" data-aos-delay="100">
-               <h3 class="font-bold text-xl mb-2"><?= $res['module_title_2'] ?></h3>
-               <p><?= $res['module_description_2']; ?></p>
-            </div>
-         <?php } ?>
-         <?php
-         if ($res['module_title_1']) {
-         ?>
-            <div class="card glass p-6 rounded-2xl text-white bg-[#021969]" data-aos="flip-left" data-aos-delay="200">
-               <h3 class="font-bold text-xl mb-2"><?= $res['module_title_3'] ?></h3>
-               <p><?= $res['module_description_3']; ?></p>
-            </div>
-         <?php } ?>
+         </div>
 
       </div>
 

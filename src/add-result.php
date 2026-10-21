@@ -17,13 +17,11 @@ if(isset($_POST['save_result'])){
 
     $stmt = $conn->prepare("
         INSERT INTO results(
-            course_id,
             year,
             created_at,
             updated_at
         )
         VALUES(
-            :course_id,
             :year,
             CURDATE(),
             CURDATE()
@@ -31,7 +29,6 @@ if(isset($_POST['save_result'])){
     ");
 
     $stmt->execute([
-        ':course_id' => $course_id,
         ':year' => $year
     ]);
 
@@ -158,7 +155,7 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                 <!-- COURSE -->
 
-                                <div>
+                                <!-- <div>
 
                                     <label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
 
@@ -187,7 +184,7 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                     </select>
 
-                                </div>
+                                </div> -->
 
                                 <!-- YEAR -->
 

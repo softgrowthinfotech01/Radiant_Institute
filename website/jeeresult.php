@@ -222,25 +222,21 @@ foreach ($extras as &$row) {
 
 <div class="text-center mb-14">
     <h2 class="text-3xl md:text-5xl font-bold text-[#E41C2A]">
-        <?= htmlspecialchars($extra['title']); ?> : <?= htmlspecialchars($extra['year']); ?>
+       <?= htmlspecialchars($extra['year']); ?>
     </h2>
-
-    <p class="text-gray-600 mt-3">
-        <?= htmlspecialchars($extra['description']); ?>
-    </p>
 </div>
 
-<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+<div class="grid md:grid-cols-1 lg:grid-cols-1 gap-10">
 
 <?php foreach ($images as $img): ?>
 
     <!-- IMAGE CARD -->
-    <div class="gallery-card group" data-aos="zoom-in">
+    <div class="gallery-card group m-auto w-full" data-aos="zoom-in">
         <div class="relative overflow-hidden rounded-2xl shadow-2xl cursor-pointer">
 
             <img 
                 src="../src/uploads/results/<?= htmlspecialchars($img) ?>"
-                class="media w-full h-64 object-cover brightness-75"
+                class="media w-full h-full object-cover brightness-75"
                 loading="lazy"
                 onerror="this.closest('.gallery-card').remove();"
             >

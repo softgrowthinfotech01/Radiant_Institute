@@ -174,6 +174,15 @@
             <p>radiantcoaching@gmail.com</p>
 
           </div>
+          <div class="flex gap-3 items-start">
+
+            <div class="bg-yellow-400/20 p-2 rounded-lg">
+              ✉️
+            </div>
+
+            <p>shaibazpathan0@gmail.com</p>
+
+          </div>
 
           <!-- TIMING -->
           <!-- <div class="flex gap-3 items-start">

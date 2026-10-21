@@ -138,7 +138,7 @@ Have questions? Want to join Radiant? Contact us today and we’ll guide you.
 
 <div class="card bg-white/10 p-6 rounded-xl backdrop-blur border border-white/10">
   <h3 class="font-bold text-gray-800">📧 Email</h3>
-  <p class="text-gray-800">info@radiant.com</p>
+  <p class="text-gray-800">shaibazpathan0@gmail.com</p>
 </div>
 
 </div>

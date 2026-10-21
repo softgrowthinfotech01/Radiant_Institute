@@ -19,12 +19,6 @@ $limit = 5;
 
 $offset = ($page - 1) * $limit;
 
-/*
-|--------------------------------------------------------------------------
-| MAIN QUERY
-|--------------------------------------------------------------------------
-*/
-
 $query = "
 SELECT
 results.*,
@@ -52,12 +46,6 @@ if ($search != '') {
     $params[':search'] = "%$search%";
 }
 
-/*
-|--------------------------------------------------------------------------
-| COUNT QUERY
-|--------------------------------------------------------------------------
-*/
-
 $countQuery = "
 SELECT COUNT(*) as total
 FROM results
@@ -82,12 +70,6 @@ $totalRecords =
 
 $totalPages =
     ceil($totalRecords / $limit);
-
-/*
-|--------------------------------------------------------------------------
-| PAGINATION
-|--------------------------------------------------------------------------
-*/
 
 $query .= "
 ORDER BY results.id DESC
@@ -236,9 +218,9 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                     <tr>
 
-                                        <th class="px-4 py-3 font-semibold lg:px-6">
+                                        <!-- <th class="px-4 py-3 font-semibold lg:px-6">
                                             Course
-                                        </th>
+                                        </th> -->
 
                                         <th class="px-4 py-3 font-semibold lg:px-6">
                                             Year
@@ -272,7 +254,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                             <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
 
-                                                <td class="px-4 py-3 lg:px-6">
+                                                <!-- <td class="px-4 py-3 lg:px-6">
 
                                                     <div class="font-medium">
 
@@ -280,7 +262,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                                     </div>
 
-                                                </td>
+                                                </td> -->
 
                                                 <td class="px-4 py-3 lg:px-6">
 

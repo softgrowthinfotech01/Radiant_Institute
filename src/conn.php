@@ -1,7 +1,7 @@
 <?php
 
 $host = "localhost";
-$dbname = "radiant_institute";
+$dbname = "smartapp";
 $username = "root";
 $password = "";
 

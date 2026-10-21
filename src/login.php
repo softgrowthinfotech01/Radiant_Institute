@@ -1,57 +1,35 @@
 <?php
-
 session_start();
+include('conn.php');
 
-include('../conn.php');
-
-if(isset($_SESSION['admin'])){
-
-    header('location:index');
-
-    exit;
-}
-
-$error = '';
+$error = "";
 
 if(isset($_POST['login'])){
 
     $email = trim($_POST['email']);
+    $password = $_POST['password'];
 
-    $password = trim($_POST['password']);
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email=?");
+    $stmt->execute([$email]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $stmt = $conn->prepare("
-        SELECT *
-        FROM admins
-        WHERE email = :email
-    ");
+    // PLAIN TEXT PASSWORD CHECK
+    if($user && $password === $user['password']){
 
-    $stmt->execute([
-        ':email' => $email
-    ]);
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['role'] = $user['role'];
 
-    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if($admin){
-
-        if($password == $admin['password']){
-
-            $_SESSION['admin'] = $admin;
-
-            header('location:index');
-
-            exit;
-
+        if($user['role']=='admin'){
+            header("Location: admin/dashboard.php");
         }else{
-
-            $error = 'Invalid Password';
+            header("Location: users/dashboard.php");
         }
+        exit;
 
     }else{
-
-        $error = 'Invalid Email';
+        $error = "Invalid Login Credentials";
     }
 }
-
 ?>
 
 <!DOCTYPE html>

@@ -6,6 +6,13 @@ $select->execute();
 
 $courses = $select->fetchAll(PDO::FETCH_ASSOC);
 // print_r($courses);exit;
+
+
+$notification = $conn->prepare('select * FROM notification where status = "active"');
+$notification->execute();
+
+$not = $notification->fetchAll(PDO::FETCH_ASSOC);
+// print_r($not);exit;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,11 +55,26 @@ $courses = $select->fetchAll(PDO::FETCH_ASSOC);
             max-width: 100%;
             pointer-events: none;
         }
-    </style>
+
+        .blink {
+                animation: blinker 1.5s linear infinite;
+                color: red;
+                font-family: sans-serif;
+            }
+
+            @keyframes blinker {
+                50% {
+                    opacity: 0;
+                }
+            }
+}
+    </style> 
 
 </head>
 
 <body class="bg-gray-100">
+
+
 
     <!-- ================= NAVBAR ================= -->
     <header class="fixed top-0 left-0 w-full z-[99999] bg-white shadow-md isolate]" style="background-image:url('images/amuly-bg.png');">
@@ -70,6 +92,8 @@ $courses = $select->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </a>
 
+   
+           
             <!-- DESKTOP MENU -->
             <nav class="hidden xl:flex xl:gap-6 2xl:gap-8 whitespace-nowrap text-black items-center">
 
@@ -92,7 +116,7 @@ $courses = $select->fetchAll(PDO::FETCH_ASSOC);
                         <?php } ?>
                     </div>
                 </div>
-
+             
 
                 <!-- COURSE -->
                 <div class="relative">
@@ -126,17 +150,28 @@ $courses = $select->fetchAll(PDO::FETCH_ASSOC);
                 <a class="font-semibold" href="contact_us">Contact Us</a>
 
             </nav>
-
+           
             <!-- MOBILE BUTTON -->
             <button onclick="toggleMenu()" aria-label="Open menu" class="xl:hidden text-3xl leading-none text-black p-1 -mr-1">
                 ☰
             </button>
 
         </div>
+<marquee class ="blink" behavior="scroll" direction="left" scrollamount="5"  onmouseover="this.stop();" onmouseout="this.start();">
+<?php for($i = 0; $i<count($not);$i++){ ?>
+<span>
+<a style="padding:0 5px;" href="<?php echo $not[$i]['url'] ?>"><?php echo $not[$i]['label'] ?></a>|
+</span>
+<?php 
+}
+ ?>
+</marquee>
     </header>
 
     <!-- SPACING (so content doesn't go under navbar) -->
     <div class=""></div>
+
+
 
     <!-- ================= MOBILE SIDEBAR ================= -->
     <div id="mobileMenu"
@@ -175,7 +210,7 @@ $courses = $select->fetchAll(PDO::FETCH_ASSOC);
                         <?php } ?>
                     </div>
                 </div>
-
+   
                 <!-- RESULTS -->
                 <!-- <div>
                     <button onclick="toggleMobileDropdown('m-results')"
@@ -210,7 +245,7 @@ $courses = $select->fetchAll(PDO::FETCH_ASSOC);
                 </div>
 
                 <a class="font-semibold" href="enquiry">Enquiry</a>
-
+               
                 <!-- NORMAL LINKS -->
                 <a href="about_us" class="font-semibold">About Us</a>
                 <a href="faculty" class="font-semibold">Faculty</a>
@@ -219,15 +254,20 @@ $courses = $select->fetchAll(PDO::FETCH_ASSOC);
                 <a href="contact_us" class="font-semibold">Contact Us</a>
 
             </div>
-
+            
+           
         </div>
+        
     </div>
-
+   
     <!-- ================= OVERLAY ================= -->
     <div id="overlay"
         class="fixed inset-0 bg-black/60 opacity-0 pointer-events-none
   transition-opacity duration-500 ease-out z-[99999]">
     </div>
+<div>    
+
+
 
     <!-- ================= SCRIPT ================= -->
     <script>

@@ -926,8 +926,18 @@ our result animation end */
     width: 280px;
     height: 220px;
   }
+  .blink {
+                animation: blinker 1.5s linear infinite;
+                color: red;
+                font-family: sans-serif;
+            }
 
-}
+            @keyframes blinker {
+                50% {
+                    opacity: 0;
+                }
+            }
+} 
   </style>
 
 </head>
@@ -935,11 +945,22 @@ our result animation end */
 
 <body class="bg-lightbg">
 
-  <!-- ================= HERO ================= -->
-  <section class="relative bg-[#111827] overflow-hidden xl:lg:md:top-[0px] top-[5%]">
 
+  <!-- ================= HERO ================= -->
+<marquee class ="blink" behavior="scroll" direction="left" scrollamount="5"  onmouseover="this.stop();" onmouseout="this.start();">
+<?php for($i = 0; $i<count($not);$i++){ ?>
+<span>
+<a style="padding:0 5px;" href="<?php echo $not[$i]['url'] ?>"><?php echo $not[$i]['label'] ?></a>|
+</span>
+<?php 
+}
+ ?>
+</marquee>
+  <section class="relative bg-[#111827] overflow-hidden xl:lg:md:top-[0px] top-[5%]">
+  
     <!-- SLIDER WRAPPER -->
     <!-- <div id="slider" class="relative w-full h-screen"> -->
+    
 
       <!-- SLIDES -->
       <div id="slider" class="relative w-full object-cover md:h-screen h-[35vh] top-5 md:top-12">

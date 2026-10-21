@@ -1,0 +1,80 @@
+[15-Oct-2026 12:10:23 UTC] PHP Warning:  include(conn.php): Failed to open stream: No such file or directory in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[15-Oct-2026 12:10:23 UTC] PHP Warning:  include(conn.php): Failed to open stream: No such file or directory in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[15-Oct-2026 12:10:23 UTC] PHP Warning:  include(): Failed opening 'conn.php' for inclusion (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[15-Oct-2026 12:10:23 UTC] PHP Warning:  Undefined variable $conn in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 11
+[15-Oct-2026 12:10:23 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php:11
+Stack trace:
+#0 {main}
+  thrown in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 11
+[15-Oct-2026 12:10:25 UTC] PHP Warning:  include(conn.php): Failed to open stream: No such file or directory in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[15-Oct-2026 12:10:25 UTC] PHP Warning:  include(conn.php): Failed to open stream: No such file or directory in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[15-Oct-2026 12:10:25 UTC] PHP Warning:  include(): Failed opening 'conn.php' for inclusion (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[15-Oct-2026 12:10:25 UTC] PHP Warning:  Undefined variable $conn in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 11
+[15-Oct-2026 12:10:25 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php:11
+Stack trace:
+#0 {main}
+  thrown in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 11
+[15-Oct-2026 12:10:51 UTC] PHP Warning:  include(conn.php): Failed to open stream: No such file or directory in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[15-Oct-2026 12:10:51 UTC] PHP Warning:  include(conn.php): Failed to open stream: No such file or directory in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[15-Oct-2026 12:10:51 UTC] PHP Warning:  include(): Failed opening 'conn.php' for inclusion (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[15-Oct-2026 12:10:51 UTC] PHP Warning:  Undefined variable $conn in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 11
+[15-Oct-2026 12:10:51 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php:11
+Stack trace:
+#0 {main}
+  thrown in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 11
+[15-Oct-2026 12:10:52 UTC] PHP Warning:  include(conn.php): Failed to open stream: No such file or directory in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[15-Oct-2026 12:10:52 UTC] PHP Warning:  include(conn.php): Failed to open stream: No such file or directory in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[15-Oct-2026 12:10:52 UTC] PHP Warning:  include(): Failed opening 'conn.php' for inclusion (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[15-Oct-2026 12:10:52 UTC] PHP Warning:  Undefined variable $conn in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 11
+[15-Oct-2026 12:10:52 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php:11
+Stack trace:
+#0 {main}
+  thrown in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 11
+[15-Oct-2026 12:10:57 UTC] PHP Warning:  include(conn.php): Failed to open stream: No such file or directory in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[15-Oct-2026 12:10:57 UTC] PHP Warning:  include(conn.php): Failed to open stream: No such file or directory in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[15-Oct-2026 12:10:57 UTC] PHP Warning:  include(): Failed opening 'conn.php' for inclusion (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[15-Oct-2026 12:10:57 UTC] PHP Warning:  Undefined variable $conn in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 11
+[15-Oct-2026 12:10:57 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php:11
+Stack trace:
+#0 {main}
+  thrown in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 11
+[15-Oct-2026 12:10:58 UTC] PHP Warning:  include(conn.php): Failed to open stream: No such file or directory in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[15-Oct-2026 12:10:58 UTC] PHP Warning:  include(conn.php): Failed to open stream: No such file or directory in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[15-Oct-2026 12:10:58 UTC] PHP Warning:  include(): Failed opening 'conn.php' for inclusion (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[15-Oct-2026 12:10:58 UTC] PHP Warning:  Undefined variable $conn in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 11
+[15-Oct-2026 12:10:58 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php:11
+Stack trace:
+#0 {main}
+  thrown in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 11
+[19-Oct-2026 10:31:08 UTC] PHP Warning:  include(conn.php): Failed to open stream: No such file or directory in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[19-Oct-2026 10:31:08 UTC] PHP Warning:  include(conn.php): Failed to open stream: No such file or directory in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[19-Oct-2026 10:31:08 UTC] PHP Warning:  include(): Failed opening 'conn.php' for inclusion (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[19-Oct-2026 10:31:08 UTC] PHP Warning:  Undefined variable $conn in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 11
+[19-Oct-2026 10:31:08 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php:11
+Stack trace:
+#0 {main}
+  thrown in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 11
+[19-Oct-2026 10:31:11 UTC] PHP Warning:  include(conn.php): Failed to open stream: No such file or directory in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[19-Oct-2026 10:31:11 UTC] PHP Warning:  include(conn.php): Failed to open stream: No such file or directory in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[19-Oct-2026 10:31:11 UTC] PHP Warning:  include(): Failed opening 'conn.php' for inclusion (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[19-Oct-2026 10:31:11 UTC] PHP Warning:  Undefined variable $conn in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 11
+[19-Oct-2026 10:31:11 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php:11
+Stack trace:
+#0 {main}
+  thrown in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 11
+[19-Oct-2026 10:31:25 UTC] PHP Warning:  include(conn.php): Failed to open stream: No such file or directory in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[19-Oct-2026 10:31:25 UTC] PHP Warning:  include(conn.php): Failed to open stream: No such file or directory in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[19-Oct-2026 10:31:25 UTC] PHP Warning:  include(): Failed opening 'conn.php' for inclusion (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[19-Oct-2026 10:31:25 UTC] PHP Warning:  Undefined variable $conn in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 11
+[19-Oct-2026 10:31:25 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php:11
+Stack trace:
+#0 {main}
+  thrown in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 11
+[19-Oct-2026 10:31:26 UTC] PHP Warning:  include(conn.php): Failed to open stream: No such file or directory in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[19-Oct-2026 10:31:26 UTC] PHP Warning:  include(conn.php): Failed to open stream: No such file or directory in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[19-Oct-2026 10:31:26 UTC] PHP Warning:  include(): Failed opening 'conn.php' for inclusion (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 3
+[19-Oct-2026 10:31:26 UTC] PHP Warning:  Undefined variable $conn in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 11
+[19-Oct-2026 10:31:26 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php:11
+Stack trace:
+#0 {main}
+  thrown in /home/softgrow/softgrowthinfotech.com/radiant/admin/index.php on line 11

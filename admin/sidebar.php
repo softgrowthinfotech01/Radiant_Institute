@@ -98,6 +98,18 @@
               stroke-width="2"
               d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
           </svg><span class="nav-label">Faculty</span></a>
+
+        <a href="notification" data-nav class="sidebar-link"><svg class="h-5 w-5 shrink-0 opacity-70"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              />
+          </svg><span class="nav-label">Notification</span></a>
+
       </div>
       <div class="mt-auto sidebar-footer-inner border-t border-slate-200 p-3 dark:border-slate-800">
         <a href="logout" class="sidebar-link text-red-600 hover:bg-red-50 hover:text-red-700 dark:text-red-400 dark:hover:bg-red-950/40"><svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
